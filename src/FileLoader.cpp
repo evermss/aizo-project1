@@ -23,13 +23,13 @@ bool FileLoader::loadFromFile(const std::string& fileName, DynamicArray& arr) {
 
     for (int i = 0; i < n; i++) {
         file >> arr[i];
+
         if (file.fail()) {
             std::cout << "Blad podczas wczytywania danych.\n";
             return false;
         }
     }
 
-    file.close();
     return true;
 }
 
@@ -46,6 +46,5 @@ bool FileLoader::saveToFile(const std::string& fileName, const DynamicArray& arr
         file << arr[i] << "\n";
     }
 
-    file.close();
     return true;
 }

@@ -1,6 +1,10 @@
 #include "QuickSort.h"
 
 void QuickSort::sort(DynamicArray& arr, int left, int right) {
+    if (arr.getSize() == 0 || left >= right) {
+        return;
+    }
+
     int i = left;
     int j = right;
     int pivot = arr[(left + right) / 2];
@@ -24,10 +28,10 @@ void QuickSort::sort(DynamicArray& arr, int left, int right) {
     }
 
     if (left < j) {
-        QuickSort::sort(arr, left, j);
+        sort(arr, left, j);
     }
 
     if (i < right) {
-        QuickSort::sort(arr, i, right);
+        sort(arr, i, right);
     }
 }

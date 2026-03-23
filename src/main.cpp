@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <limits>
+#include <string>
 #include "FileLoader.h"
 #include "DynamicArray.h"
 #include "QuickSort.h"
@@ -31,6 +32,29 @@ void printArray(const DynamicArray& arr) {
     std::cout << "\n";
 }
 
+bool parsePositiveInt(const char* text, int& value) {
+    if (text == nullptr || text[0] == '\0') {
+        return false;
+    }
+
+    int result = 0;
+
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] < '0' || text[i] > '9') {
+            return false;
+        }
+
+        result = result * 10 + (text[i] - '0');
+    }
+
+    if (result <= 0) {
+        return false;
+    }
+
+    value = result;
+    return true;
+}
+
 bool runSingleMode(const std::string& inputFile, const std::string& outputFile, bool saveOutput) {
     DynamicArray arr;
 
@@ -43,7 +67,11 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
     printArray(arr);
 
     auto start = std::chrono::high_resolution_clock::now();
-    QuickSort::sort(arr, 0, arr.getSize() - 1);
+
+    if (arr.getSize() > 0) {
+        QuickSort::sort(arr, 0, arr.getSize() - 1);
+    }
+
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -91,10 +119,15 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
         }
 
         auto start = std::chrono::high_resolution_clock::now();
-        QuickSort::sort(arr, 0, arr.getSize() - 1);
+
+        if (arr.getSize() > 0) {
+            QuickSort::sort(arr, 0, arr.getSize() - 1);
+        }
+
         auto end = std::chrono::high_resolution_clock::now();
 
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        long long duration =
+            std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
         if (!SortChecker::isSorted(arr)) {
             std::cout << "Blad sortowania w powtorzeniu: " << i + 1 << "\n";
@@ -163,7 +196,12 @@ int main(int argc, char* argv[]) {
         }
 
         std::string inputFile = argv[2];
-        int repetitions = std::stoi(argv[3]);
+        int repetitions = 0;
+
+        if (!parsePositiveInt(argv[3], repetitions)) {
+            std::cout << "Niepoprawna liczba powtorzen.\n";
+            return 1;
+        }
 
         return runResearchMode(inputFile, repetitions) ? 0 : 1;
     }
