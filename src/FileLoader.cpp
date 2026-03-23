@@ -13,6 +13,7 @@ bool FileLoader::loadFromFile(const std::string& fileName, DynamicArray& arr) {
     int n;
     file >> n;
 
+    // Sprawdzenie, czy pierwsza wartosc to poprawny rozmiar
     if (file.fail() || n < 0) {
         std::cout << "Niepoprawny format pliku.\n";
         return false;
@@ -21,6 +22,7 @@ bool FileLoader::loadFromFile(const std::string& fileName, DynamicArray& arr) {
     arr.clear();
     arr.resize(n);
 
+    // Wczytanie kolejnych elementow do tablicy
     for (int i = 0; i < n; i++) {
         file >> arr[i];
 
@@ -41,6 +43,7 @@ bool FileLoader::saveToFile(const std::string& fileName, const DynamicArray& arr
         return false;
     }
 
+    // Zapis rozmiaru i posortowanych danych do pliku
     file << arr.getSize() << "\n";
     for (int i = 0; i < arr.getSize(); i++) {
         file << arr[i] << "\n";

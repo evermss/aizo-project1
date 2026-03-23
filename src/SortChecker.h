@@ -5,7 +5,7 @@
 
 class SortChecker {
 public:
-    static bool isSorted(const DynamicArray& arr);
+    static bool isSorted(const DynamicArray& arr); // Sprawdza, czy tablica jest posortowana
 };
 
 #endif

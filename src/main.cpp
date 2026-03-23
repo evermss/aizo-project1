@@ -7,6 +7,7 @@
 #include "QuickSort.h"
 #include "SortChecker.h"
 
+// Wyswietla instrukcje obslugi programu
 void showHelp() {
     std::cout << "=== AiZO Projekt 1 ===\n";
     std::cout << "Dostepne tryby:\n";
@@ -25,6 +26,7 @@ void showHelp() {
     std::cout << "  kolejne linie - wartosci\n";
 }
 
+// Wypisuje wszystkie elementy tablicy
 void printArray(const DynamicArray& arr) {
     for (int i = 0; i < arr.getSize(); i++) {
         std::cout << arr[i] << " ";
@@ -32,6 +34,7 @@ void printArray(const DynamicArray& arr) {
     std::cout << "\n";
 }
 
+// Sprawdza, czy tekst jest poprawna dodatnia liczba calkowita
 bool parsePositiveInt(const char* text, int& value) {
     if (text == nullptr || text[0] == '\0') {
         return false;
@@ -55,9 +58,11 @@ bool parsePositiveInt(const char* text, int& value) {
     return true;
 }
 
+// Tryb pojedynczego testu
 bool runSingleMode(const std::string& inputFile, const std::string& outputFile, bool saveOutput) {
     DynamicArray arr;
 
+    // Wczytanie danych z pliku do tablicy
     if (!FileLoader::loadFromFile(inputFile, arr)) {
         std::cout << "Blad wczytywania pliku.\n";
         return false;
@@ -66,6 +71,7 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
     std::cout << "Dane przed sortowaniem:\n";
     printArray(arr);
 
+    // Pomiar czasu dotyczy tylko samego sortowania
     auto start = std::chrono::high_resolution_clock::now();
 
     if (arr.getSize() > 0) {
@@ -79,6 +85,7 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
     std::cout << "Dane po sortowaniu:\n";
     printArray(arr);
 
+    // Sprawdzenie, czy dane zostaly poprawnie posortowane
     if (SortChecker::isSorted(arr)) {
         std::cout << "Tablica jest poprawnie posortowana.\n";
     } else {
@@ -88,6 +95,7 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
 
     std::cout << "Czas sortowania: " << duration.count() << " mikrosekund\n";
 
+    // Opcjonalny zapis wyniku do pliku
     if (saveOutput) {
         if (FileLoader::saveToFile(outputFile, arr)) {
             std::cout << "Zapisano wynik do pliku: " << outputFile << "\n";
@@ -100,6 +108,7 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
     return true;
 }
 
+// Tryb badan - wielokrotne uruchomienie sortowania
 bool runResearchMode(const std::string& inputFile, int repetitions) {
     if (repetitions <= 0) {
         std::cout << "Liczba powtorzen musi byc wieksza od 0.\n";
@@ -113,19 +122,23 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
     std::cout << "=== POMIARY ===\n";
 
     for (int i = 0; i < repetitions; i++) {
+        // W kazdej iteracji tworzymy nowa tablice
         DynamicArray arr;
 
+        // W kazdej iteracji od nowa wczytujemy dane z pliku
         if (!FileLoader::loadFromFile(inputFile, arr)) {
             std::cout << "Blad wczytywania pliku.\n";
             return false;
         }
 
+        // Start pomiaru czasu
         auto start = std::chrono::high_resolution_clock::now();
 
         if (arr.getSize() > 0) {
             QuickSort::sort(arr, 0, arr.getSize() - 1);
         }
 
+        // Koniec pomiaru czasu
         auto end = std::chrono::high_resolution_clock::now();
 
         long long duration =
@@ -133,6 +146,7 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
 
         std::cout << "Pomiar " << i + 1 << ": " << duration << " mikrosekund\n";
 
+        // Sprawdzenie poprawnosci po kazdym sortowaniu
         if (!SortChecker::isSorted(arr)) {
             std::cout << "Blad sortowania w powtorzeniu: " << i + 1 << "\n";
             return false;
@@ -149,6 +163,7 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
         }
     }
 
+    // Obliczenie sredniego czasu z wszystkich pomiarow
     double average = static_cast<double>(sum) / repetitions;
 
     std::cout << "\n=== TRYB BADAN ===\n";
@@ -163,6 +178,7 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
 }
 
 int main(int argc, char* argv[]) {
+    // Gdy nie podano argumentow, pokazujemy pomoc
     if (argc < 2) {
         showHelp();
         return 0;
@@ -170,11 +186,13 @@ int main(int argc, char* argv[]) {
 
     std::string mode = argv[1];
 
+    // Tryb pomocy
     if (mode == "help") {
         showHelp();
         return 0;
     }
 
+    // Tryb pojedynczego testu
     if (mode == "single") {
         if (argc < 3) {
             std::cout << "Brak pliku wejsciowego.\n";
@@ -192,6 +210,7 @@ int main(int argc, char* argv[]) {
         return runSingleMode(inputFile, "", false) ? 0 : 1;
     }
 
+    // Tryb badan
     if (mode == "research") {
         if (argc < 4) {
             std::cout << "Brak wymaganych argumentow do trybu research.\n";
@@ -210,6 +229,7 @@ int main(int argc, char* argv[]) {
         return runResearchMode(inputFile, repetitions) ? 0 : 1;
     }
 
+    // Nieznany tryb programu
     std::cout << "Nieznany tryb: " << mode << "\n";
     showHelp();
     return 1;

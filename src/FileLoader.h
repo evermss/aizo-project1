@@ -6,8 +6,8 @@
 
 class FileLoader {
 public:
-    static bool loadFromFile(const std::string& fileName, DynamicArray& arr);
-    static bool saveToFile(const std::string& fileName, const DynamicArray& arr);
+    static bool loadFromFile(const std::string& fileName, DynamicArray& arr);      // Wczytywanie danych z pliku
+    static bool saveToFile(const std::string& fileName, const DynamicArray& arr);  // Zapis danych do pliku
 };
 
 #endif

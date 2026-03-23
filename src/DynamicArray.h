@@ -10,12 +10,12 @@ public:
     DynamicArray();
     ~DynamicArray();
 
-    void resize(int newSize);
-    void clear();
-    int getSize() const;
+    void resize(int newSize);   // Zmiana rozmiaru tablicy
+    void clear();               // Usuniecie wszystkich danych
+    int getSize() const;        // Zwraca rozmiar tablicy
 
-    int& operator[](int index);
-    const int& operator[](int index) const;
+    int& operator[](int index);             // Dostep do elementu
+    const int& operator[](int index) const; // Dostep dla const
 };
 
 #endif

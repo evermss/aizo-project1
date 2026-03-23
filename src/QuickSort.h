@@ -5,7 +5,7 @@
 
 class QuickSort {
 public:
-    static void sort(DynamicArray& arr, int left, int right);
+    static void sort(DynamicArray& arr, int left, int right); // Sortowanie szybkie tablicy
 };
 
 #endif
