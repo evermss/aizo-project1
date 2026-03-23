@@ -110,6 +110,8 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
     long long minTime = std::numeric_limits<long long>::max();
     long long maxTime = std::numeric_limits<long long>::min();
 
+    std::cout << "=== POMIARY ===\n";
+
     for (int i = 0; i < repetitions; i++) {
         DynamicArray arr;
 
@@ -129,6 +131,8 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
         long long duration =
             std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
+        std::cout << "Pomiar " << i + 1 << ": " << duration << " mikrosekund\n";
+
         if (!SortChecker::isSorted(arr)) {
             std::cout << "Blad sortowania w powtorzeniu: " << i + 1 << "\n";
             return false;
@@ -147,7 +151,7 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
 
     double average = static_cast<double>(sum) / repetitions;
 
-    std::cout << "=== TRYB BADAN ===\n";
+    std::cout << "\n=== TRYB BADAN ===\n";
     std::cout << "Plik: " << inputFile << "\n";
     std::cout << "Powtorzenia: " << repetitions << "\n";
     std::cout << "Algorytm: QuickSort\n";
