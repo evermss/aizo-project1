@@ -28,7 +28,7 @@ void DynamicArray::clear() {
     data = nullptr;
     size = 0;
 }
-
+//zwraca liczbe elementow
 int DynamicArray::getSize() const {
     return size;
 }

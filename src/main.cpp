@@ -35,27 +35,9 @@ void printArray(const DynamicArray& arr) {
 }
 
 // Sprawdza, czy tekst jest poprawna dodatnia liczba calkowita
-bool parsePositiveInt(const char* text, int& value) {
-    if (text == nullptr || text[0] == '\0') {
-        return false;
-    }
-
-    int result = 0;
-
-    for (int i = 0; text[i] != '\0'; i++) {
-        if (text[i] < '0' || text[i] > '9') {
-            return false;
-        }
-
-        result = result * 10 + (text[i] - '0');
-    }
-
-    if (result <= 0) {
-        return false;
-    }
-
-    value = result;
-    return true;
+bool parsePositiveInt(const std::string& line, int& value) {
+    value = std::stoi(line);
+    return value > 0;
 }
 
 // Tryb pojedynczego testu
