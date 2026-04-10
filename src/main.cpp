@@ -36,8 +36,12 @@ void printArray(const DynamicArray& arr) {
 
 // Sprawdza, czy tekst jest poprawna dodatnia liczba calkowita
 bool parsePositiveInt(const std::string& line, int& value) {
-    value = std::stoi(line);
-    return value > 0;
+    try {
+        value = std::stoi(line);
+        return value > 0;
+    } catch (...) {
+        return false;
+    }
 }
 
 // Tryb pojedynczego testu
