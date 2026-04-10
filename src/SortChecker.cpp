@@ -1,9 +1,9 @@
 #include "SortChecker.h"
 
-bool SortChecker::isSorted(const DynamicArray& arr) {
-    // Sprawdza, czy elementy sa ulozone rosnaco
-    for (int i = 0; i < arr.getSize() - 1; i++) {
-        if (arr[i] > arr[i + 1]) {
+// Sprawdza, czy struktura jest posortowana rosnaco
+bool SortChecker::isSorted(const LinearStructure& structure) {
+    for (int i = 0; i < structure.getSize() - 1; i++) {
+        if (structure.get(i) > structure.get(i + 1)) {
             return false;
         }
     }

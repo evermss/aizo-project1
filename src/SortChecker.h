@@ -1,11 +1,11 @@
 #ifndef SORTCHECKER_H
 #define SORTCHECKER_H
 
-#include "DynamicArray.h"
+#include "LinearStructure.h"
 
 class SortChecker {
 public:
-    static bool isSorted(const DynamicArray& arr); // Sprawdza, czy tablica jest posortowana
+    static bool isSorted(const LinearStructure& structure);
 };
 
 #endif
