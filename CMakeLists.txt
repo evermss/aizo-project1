@@ -12,6 +12,7 @@ add_executable(aizo-project1
         src/DynamicArray.cpp
         src/QuickSort.cpp
         src/SortChecker.cpp
+        src/Timer.cpp
 )
 
 target_include_directories(aizo-project1 PRIVATE src)

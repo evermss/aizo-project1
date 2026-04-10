@@ -1,5 +1,5 @@
 #include <iostream>
-#include <chrono>
+#include "Timer.h"
 #include <limits>
 #include <string>
 #include "FileLoader.h"
@@ -54,15 +54,16 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
     printArray(arr);
 
     // Pomiar czasu dotyczy tylko samego sortowania
-    auto start = std::chrono::high_resolution_clock::now();
+    Timer timer;
+    timer.start();
 
     if (arr.getSize() > 0) {
         QuickSort::sort(arr, 0, arr.getSize() - 1);
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    timer.stop();
 
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    long long duration = timer.getDurationInMicroseconds();
 
     std::cout << "Dane po sortowaniu:\n";
     printArray(arr);
@@ -75,7 +76,7 @@ bool runSingleMode(const std::string& inputFile, const std::string& outputFile, 
         return false;
     }
 
-    std::cout << "Czas sortowania: " << duration.count() << " mikrosekund\n";
+    std::cout << "Czas sortowania: " << duration << " mikrosekund\n";
 
     // Opcjonalny zapis wyniku do pliku
     if (saveOutput) {
@@ -114,17 +115,16 @@ bool runResearchMode(const std::string& inputFile, int repetitions) {
         }
 
         // Start pomiaru czasu
-        auto start = std::chrono::high_resolution_clock::now();
+        Timer timer;
+        timer.start();
 
         if (arr.getSize() > 0) {
             QuickSort::sort(arr, 0, arr.getSize() - 1);
         }
 
-        // Koniec pomiaru czasu
-        auto end = std::chrono::high_resolution_clock::now();
+        timer.stop();
 
-        long long duration =
-            std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        long long duration = timer.getDurationInMicroseconds();
 
         std::cout << "Pomiar " << i + 1 << ": " << duration << " mikrosekund\n";
 
