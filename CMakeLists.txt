@@ -19,10 +19,25 @@ add_executable(aizo-project1
         src/CsvReportWriter.cpp
 )
 
-target_include_directories(aizo-project1 PRIVATE src)
+target_include_directories(aizo-project1 PRIVATE
+        src
+        src/include
+)
+
+target_link_directories(aizo-project1 PRIVATE
+        src/lib
+)
+
+target_link_libraries(aizo-project1 PRIVATE
+        parameters
+)
 
 target_compile_options(aizo-project1 PRIVATE
         -Wall
         -Wextra
         -Werror
+)
+
+set_target_properties(aizo-project1 PROPERTIES
+        BUILD_RPATH "${CMAKE_SOURCE_DIR}/src/lib"
 )
