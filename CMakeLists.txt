@@ -12,10 +12,11 @@ add_executable(aizo-project1
         src/DynamicArray.cpp
         src/SinglyLinkedList.cpp
         src/DoublyLinkedList.cpp
-        src/QuickSort.cpp
+        src/QuickSorter.cpp
+        src/ShellSorter.cpp
+        src/BucketSorter.cpp
         src/SortChecker.cpp
-        src/QuickSort.cpp
-        src/QuickSort.h
+        src/CsvReportWriter.cpp
 )
 
 target_include_directories(aizo-project1 PRIVATE src)
