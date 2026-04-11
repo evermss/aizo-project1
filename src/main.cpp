@@ -404,19 +404,30 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
-        if (argc >= 6) {
-            std::string fifthArgument = argv[5];
+        // BucketSort nie ma wariantu
+        if (algorithmName == "bucket") {
+            if (argc >= 6) {
+                outputFile = argv[5];
+                saveOutput = true;
+            }
+        }
 
-            if (isValidVariantName(algorithmName, fifthArgument)) {
+        // QuickSort i ShellSort mają wariant
+        if (algorithmName == "quick" || algorithmName == "shell") {
+            if (argc >= 6) {
+                std::string fifthArgument = argv[5];
+
+                if (!isValidVariantName(algorithmName, fifthArgument)) {
+                    std::cout << "Niepoprawny wariant algorytmu.\n";
+                    return 1;
+                }
+
                 variantName = fifthArgument;
 
                 if (argc >= 7) {
                     outputFile = argv[6];
                     saveOutput = true;
                 }
-            } else {
-                outputFile = fifthArgument;
-                saveOutput = true;
             }
         }
 
