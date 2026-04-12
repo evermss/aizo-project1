@@ -1,4 +1,4 @@
-#include "SinglyLinkedList.h"
+#include "structures/SinglyLinkedList.h"
 
 // Konstruktor listy
 SinglyLinkedList::SinglyLinkedList() {

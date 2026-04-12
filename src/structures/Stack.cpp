@@ -1,4 +1,4 @@
-#include "Stack.h"
+#include "structures/Stack.h"
 
 // Konstruktor
 Stack::Stack() {

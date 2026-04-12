@@ -1,4 +1,4 @@
-#include "DoublyLinkedList.h"
+#include "structures/DoublyLinkedList.h"
 
 DoublyLinkedList::DoublyLinkedList() {
     head = nullptr;

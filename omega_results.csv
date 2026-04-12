@@ -1,0 +1,5 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,16:23:10,quick,slist,middle,20,4.76523e+06,3340288,6309618
+2026-04-12,16:24:33,quick,dlist,middle,20,2.48701e+06,1671676,3368757
+2026-04-12,16:26:30,quick,stack,middle,20,5.30996e+06,3340381,7643083
+2026-04-12,17:25:46,quick,binaryTree,middle,5,3.10396e+06,2660658,3582053

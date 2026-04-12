@@ -1,4 +1,4 @@
-#include "BucketSorter.h"
+#include "algorithms/BucketSorter.h"
 
 // Sortuje jeden kubełek
 void BucketSorter::insertionSort(DynamicArray& bucket) {

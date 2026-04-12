@@ -2,7 +2,7 @@
 #define FILELOADER_H
 
 #include <string>
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
 class FileLoader {
 public:

@@ -1,4 +1,4 @@
-#include "DynamicArray.h"
+#include "structures/DynamicArray.h"
 
 DynamicArray::DynamicArray() {
     data = nullptr;

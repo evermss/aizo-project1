@@ -9,17 +9,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(aizo-project1
         src/main.cpp
         src/FileLoader.cpp
-        src/DynamicArray.cpp
-        src/SinglyLinkedList.cpp
-        src/DoublyLinkedList.cpp
-        src/QuickSorter.cpp
-        src/ShellSorter.cpp
-        src/BucketSorter.cpp
+        src/structures/DynamicArray.cpp
+        src/structures/SinglyLinkedList.cpp
+        src/structures/DoublyLinkedList.cpp
+        src/algorithms/QuickSorter.cpp
+        src/algorithms/ShellSorter.cpp
+        src/algorithms/BucketSorter.cpp
         src/SortChecker.cpp
         src/CsvReportWriter.cpp
-        src/BinarySearchTree.cpp
-        src/Stack.cpp
+        src/structures/BinarySearchTree.cpp
+        src/structures/Stack.cpp
         src/research/ResearchRunner.cpp
+        src/TemplateArray.h
+        src/TemplateQuickSort.h
+        src/TemplateSortChecker.h
+        src/research/TypeResearch.cpp
+        src/research/TypeResearch.h
 
 )
 

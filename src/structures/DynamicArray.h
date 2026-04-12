@@ -1,7 +1,7 @@
 #ifndef DYNAMICARRAY_H
 #define DYNAMICARRAY_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
 class DynamicArray : public LinearStructure {
 private:

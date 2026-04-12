@@ -1,0 +1,4 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,20:00:04,quick,template_array_int,middle,20,2132.8,1985,2370
+2026-04-12,20:00:04,quick,template_array_unsigned_int,middle,20,1835.4,1655,2305
+2026-04-12,20:00:04,quick,template_array_string,middle,20,13192.4,12239,15951

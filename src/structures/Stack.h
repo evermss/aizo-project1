@@ -1,24 +1,23 @@
-#ifndef SINGLYLINKEDLIST_H
-#define SINGLYLINKEDLIST_H
+#ifndef STACK_H
+#define STACK_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
-class SinglyLinkedList : public LinearStructure {
+class Stack : public LinearStructure {
 private:
     struct Node {
         int value;
         Node* next;
     };
 
-    Node* head;
-    Node* tail;
+    Node* topNode;
     int size;
 
     Node* getNode(int index) const;
 
 public:
-    SinglyLinkedList();
-    ~SinglyLinkedList() override;
+    Stack();
+    ~Stack() override;
 
     int getSize() const override;
     void clear() override;

@@ -1,23 +1,26 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef DOUBLYLINKEDLIST_H
+#define DOUBLYLINKEDLIST_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
-class Stack : public LinearStructure {
+class DoublyLinkedList : public LinearStructure {
 private:
     struct Node {
         int value;
+        Node* prev;
         Node* next;
     };
 
-    Node* topNode;
+    Node* head;
+    Node* tail;
     int size;
 
+    // Zwraca wskaznik na node o danym indeksie
     Node* getNode(int index) const;
 
 public:
-    Stack();
-    ~Stack() override;
+    DoublyLinkedList();
+    ~DoublyLinkedList() override;
 
     int getSize() const override;
     void clear() override;

@@ -1,4 +1,4 @@
-#include "BinarySearchTree.h"
+#include "structures/BinarySearchTree.h"
 
 // Konstruktor
 BinarySearchTree::BinarySearchTree() {

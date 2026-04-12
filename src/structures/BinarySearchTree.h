@@ -1,7 +1,7 @@
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
 class BinarySearchTree : public LinearStructure {
 private:

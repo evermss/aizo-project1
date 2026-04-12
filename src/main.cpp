@@ -7,19 +7,19 @@
 
 #include "Parameters.h"
 #include "FileLoader.h"
-#include "DynamicArray.h"
-#include "SinglyLinkedList.h"
-#include "DoublyLinkedList.h"
-#include "BinarySearchTree.h"
-#include "Stack.h"
-#include "QuickSorter.h"
-#include "ShellSorter.h"
-#include "BucketSorter.h"
+#include "structures/DynamicArray.h"
+#include "structures/SinglyLinkedList.h"
+#include "structures/DoublyLinkedList.h"
+#include "structures/BinarySearchTree.h"
+#include "structures/Stack.h"
+#include "algorithms/QuickSorter.h"
+#include "algorithms/ShellSorter.h"
+#include "algorithms/BucketSorter.h"
 #include "SortChecker.h"
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 #include "CsvReportWriter.h"
+#include "research/TypeResearch.h"
 
-// Typ ukladu danych
 enum class DataOrder {
     Random,
     Ascending,
@@ -185,8 +185,7 @@ void fillStructureWithRandomInts(Structure& structure, int size) {
     structure.clear();
 
     for (int i = 0; i < size; i++) {
-        int value = std::rand();
-        structure.pushBack(value);
+        structure.pushBack(std::rand());
     }
 }
 
@@ -216,17 +215,15 @@ void fillStructure(Structure& structure, int size, DataOrder order) {
         return;
     }
 
-    if (order == DataOrder::PartiallySorted) {
-        for (int i = 0; i < size; i++) {
-            structure.pushBack(i);
-        }
+    for (int i = 0; i < size; i++) {
+        structure.pushBack(i);
+    }
 
-        int changes = size / 2;
+    int changes = size / 2;
 
-        for (int i = 0; i < changes; i++) {
-            int index = std::rand() % size;
-            structure.set(index, std::rand());
-        }
+    for (int i = 0; i < changes; i++) {
+        int index = std::rand() % size;
+        structure.set(index, std::rand());
     }
 }
 
@@ -253,7 +250,6 @@ bool runSingleForStructure() {
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
-
     auto duration =
         std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 
@@ -537,9 +533,24 @@ int main(int argc, char** argv) {
 
     if (Parameters::runMode == Parameters::RunModes::benchmark &&
         Parameters::algorithm == Parameters::Algorithms::quick &&
-        Parameters::structure == Parameters::Structures::array) {
+        Parameters::structure == Parameters::Structures::array &&
+        Parameters::dataType == Parameters::DataTypes::typeString) {
+        return TypeResearch::run() ? 0 : 1;
+        }
+
+    if (Parameters::runMode == Parameters::RunModes::benchmark &&
+        Parameters::algorithm == Parameters::Algorithms::quick &&
+        Parameters::structure == Parameters::Structures::array &&
+        Parameters::dataType == Parameters::DataTypes::typeString) {
+        return TypeResearch::run() ? 0 : 1;
+        }
+
+    if (Parameters::runMode == Parameters::RunModes::benchmark &&
+        Parameters::algorithm == Parameters::Algorithms::quick &&
+        Parameters::structure == Parameters::Structures::array &&
+        Parameters::dataType == Parameters::DataTypes::typeInt) {
         return runResearchB("B_results.csv") ? 0 : 1;
-    }
+        }
 
     if (Parameters::runMode == Parameters::RunModes::singleFile) {
         return runSingleMode() ? 0 : 1;

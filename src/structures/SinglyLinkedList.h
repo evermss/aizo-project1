@@ -1,13 +1,12 @@
-#ifndef DOUBLYLINKEDLIST_H
-#define DOUBLYLINKEDLIST_H
+#ifndef SINGLYLINKEDLIST_H
+#define SINGLYLINKEDLIST_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
-class DoublyLinkedList : public LinearStructure {
+class SinglyLinkedList : public LinearStructure {
 private:
     struct Node {
         int value;
-        Node* prev;
         Node* next;
     };
 
@@ -15,12 +14,11 @@ private:
     Node* tail;
     int size;
 
-    // Zwraca wskaznik na node o danym indeksie
     Node* getNode(int index) const;
 
 public:
-    DoublyLinkedList();
-    ~DoublyLinkedList() override;
+    SinglyLinkedList();
+    ~SinglyLinkedList() override;
 
     int getSize() const override;
     void clear() override;

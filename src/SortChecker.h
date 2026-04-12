@@ -1,7 +1,7 @@
 #ifndef SORTCHECKER_H
 #define SORTCHECKER_H
 
-#include "LinearStructure.h"
+#include "structures/LinearStructure.h"
 
 class SortChecker {
 public:
