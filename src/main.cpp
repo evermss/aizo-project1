@@ -2,8 +2,7 @@
 #include <chrono>
 #include <limits>
 #include <string>
-#include <cstdlib>
-#include <ctime>
+#include <random>
 
 #include "Parameters.h"
 #include "FileLoader.h"
@@ -15,7 +14,7 @@
 #include "algorithms/QuickSorter.h"
 #include "algorithms/ShellSorter.h"
 #include "algorithms/BucketSorter.h"
-#include "SortChecker.h"
+#include "algorithms/SortChecker.h"
 #include "structures/LinearStructure.h"
 #include "CsvReportWriter.h"
 #include "research/TypeResearch.h"
@@ -26,6 +25,15 @@ enum class DataOrder {
     Descending,
     PartiallySorted
 };
+
+namespace {
+    std::mt19937 rng(std::random_device{}());
+
+    int randomInt() {
+        static std::uniform_int_distribution<int> dist(0, 1000000);
+        return dist(rng);
+    }
+}
 
 // Pokazuje pomoc
 void showHelp() {
@@ -185,7 +193,7 @@ void fillStructureWithRandomInts(Structure& structure, int size) {
     structure.clear();
 
     for (int i = 0; i < size; i++) {
-        structure.pushBack(std::rand());
+        structure.pushBack(randomInt());
     }
 }
 
@@ -196,7 +204,7 @@ void fillStructure(Structure& structure, int size, DataOrder order) {
 
     if (order == DataOrder::Random) {
         for (int i = 0; i < size; i++) {
-            structure.pushBack(std::rand());
+            structure.pushBack(randomInt());
         }
         return;
     }
@@ -222,8 +230,9 @@ void fillStructure(Structure& structure, int size, DataOrder order) {
     int changes = size / 2;
 
     for (int i = 0; i < changes; i++) {
-        int index = std::rand() % size;
-        structure.set(index, std::rand());
+        std::uniform_int_distribution<int> indexDist(0, size - 1);
+        int index = indexDist(rng);
+        structure.set(index, randomInt());
     }
 }
 
@@ -442,26 +451,25 @@ bool runResearchForStructureWithOrder(DataOrder order,
 }
 
 // Badanie B
-bool runResearchB(const std::string& csvFile) {
-    bool ok = true;
+    bool runResearchB(const std::string& csvFile) {
+        bool ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Random, csvFile, "array", "random");
 
-    ok = ok && runResearchForStructureWithOrder<DynamicArray>(DataOrder::Random, csvFile, "array", "random");
-    ok = ok && runResearchForStructureWithOrder<DynamicArray>(DataOrder::Ascending, csvFile, "array", "ascending");
-    ok = ok && runResearchForStructureWithOrder<DynamicArray>(DataOrder::Descending, csvFile, "array", "descending");
-    ok = ok && runResearchForStructureWithOrder<DynamicArray>(DataOrder::PartiallySorted, csvFile, "array", "partial");
+        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Ascending, csvFile, "array", "ascending") && ok;
+        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Descending, csvFile, "array", "descending") && ok;
+        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::PartiallySorted, csvFile, "array", "partial") && ok;
 
-    ok = ok && runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Random, csvFile, "slist", "random");
-    ok = ok && runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Ascending, csvFile, "slist", "ascending");
-    ok = ok && runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Descending, csvFile, "slist", "descending");
-    ok = ok && runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::PartiallySorted, csvFile, "slist", "partial");
+        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Random, csvFile, "slist", "random") && ok;
+        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Ascending, csvFile, "slist", "ascending") && ok;
+        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Descending, csvFile, "slist", "descending") && ok;
+        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::PartiallySorted, csvFile, "slist", "partial") && ok;
 
-    ok = ok && runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Random, csvFile, "dlist", "random");
-    ok = ok && runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Ascending, csvFile, "dlist", "ascending");
-    ok = ok && runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Descending, csvFile, "dlist", "descending");
-    ok = ok && runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::PartiallySorted, csvFile, "dlist", "partial");
+        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Random, csvFile, "dlist", "random") && ok;
+        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Ascending, csvFile, "dlist", "ascending") && ok;
+        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Descending, csvFile, "dlist", "descending") && ok;
+        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::PartiallySorted, csvFile, "dlist", "partial") && ok;
 
-    return ok;
-}
+        return ok;
+    }
 
 // Uruchamia single
 bool runSingleMode() {
@@ -516,7 +524,6 @@ bool runResearchMode() {
 }
 
 int main(int argc, char** argv) {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     int result = Parameters::readParameters(argc - 1, argv + 1);
 

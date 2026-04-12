@@ -1,0 +1,2 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,21:30:57,quick,dlist,middle,5,8314.4,7211,11002

@@ -4,11 +4,37 @@
 #include <limits>
 #include <string>
 #include <cstdlib>
+#include <random>
 
-#include "../TemplateArray.h"
-#include "../TemplateQuickSort.h"
-#include "../TemplateSortChecker.h"
+#include "../structures/TemplateArray.h"
+#include "../algorithms/TemplateQuickSort.h"
+#include "../algorithms/TemplateSortChecker.h"
 #include "../CsvReportWriter.h"
+
+static std::mt19937 rng(std::random_device{}());
+
+int randomInt() {
+    static std::uniform_int_distribution<int> dist(0, 1000000);
+    return dist(rng);
+}
+
+unsigned int randomUnsignedInt() {
+    static std::uniform_int_distribution<unsigned int> dist(0U, 1000000U);
+    return dist(rng);
+}
+
+std::string randomString() {
+    static std::uniform_int_distribution<int> letterDist(0, 25);
+
+    std::string value;
+    value += static_cast<char>('A' + letterDist(rng));
+    value += static_cast<char>('A' + letterDist(rng));
+    value += static_cast<char>('A' + letterDist(rng));
+    value += static_cast<char>('A' + letterDist(rng));
+    value += static_cast<char>('A' + letterDist(rng));
+
+    return value;
+}
 
 template <typename T>
 bool runTypeCase(const std::string& typeName,
@@ -87,7 +113,7 @@ bool runTypeCase<int>(const std::string& typeName,
         TemplateArray<int> array;
 
         for (int j = 0; j < size; j++) {
-            array.pushBack(std::rand());
+            array.pushBack(randomInt());
         }
 
         auto startTime = std::chrono::high_resolution_clock::now();

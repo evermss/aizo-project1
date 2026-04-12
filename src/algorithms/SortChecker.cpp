@@ -1,4 +1,4 @@
-#include "SortChecker.h"
+#include "algorithms/SortChecker.h"
 
 // Sprawdza, czy struktura jest posortowana rosnaco
 bool SortChecker::isSorted(const LinearStructure& structure) {

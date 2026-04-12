@@ -1,7 +1,7 @@
 #ifndef TEMPLATEQUICKSORT_H
 #define TEMPLATEQUICKSORT_H
 
-#include <cstdlib>
+#include <random>
 
 enum class TemplatePivotStrategy {
     Random,
@@ -10,9 +10,15 @@ enum class TemplatePivotStrategy {
 
 class TemplateQuickSort {
 private:
+    static int randomPivotIndex(int left, int right) {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_int_distribution<int> dist(left, right);
+        return dist(rng);
+    }
+
     static int choosePivotIndex(int left, int right, TemplatePivotStrategy strategy) {
         if (strategy == TemplatePivotStrategy::Random) {
-            return left + std::rand() % (right - left + 1);
+            return randomPivotIndex(left, right);
         }
 
         return (left + right) / 2;

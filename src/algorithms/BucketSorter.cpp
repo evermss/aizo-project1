@@ -47,7 +47,7 @@ void BucketSorter::sort(LinearStructure& structure, int bucketCount) {
         return;
     }
 
-    DynamicArray* buckets = new DynamicArray[bucketCount];
+    auto* buckets = new DynamicArray[bucketCount];
 
     long long range = static_cast<long long>(maxValue)
                     - static_cast<long long>(minValue)

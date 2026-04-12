@@ -15,14 +15,14 @@ add_executable(aizo-project1
         src/algorithms/QuickSorter.cpp
         src/algorithms/ShellSorter.cpp
         src/algorithms/BucketSorter.cpp
-        src/SortChecker.cpp
+        src/algorithms/SortChecker.cpp
         src/CsvReportWriter.cpp
         src/structures/BinarySearchTree.cpp
         src/structures/Stack.cpp
         src/research/ResearchRunner.cpp
-        src/TemplateArray.h
-        src/TemplateQuickSort.h
-        src/TemplateSortChecker.h
+        src/structures/TemplateArray.h
+        src/algorithms/TemplateQuickSort.h
+        src/algorithms/TemplateSortChecker.h
         src/research/TypeResearch.cpp
         src/research/TypeResearch.h
 
