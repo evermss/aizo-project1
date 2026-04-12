@@ -8,6 +8,7 @@ public:
     static bool runDistributionResearch();
     static bool runTypeResearch();
     static bool runOmegaResearch();
+    static bool runSelectedResearch();
 };
 
 #endif

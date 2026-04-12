@@ -17,14 +17,8 @@
 #include "algorithms/SortChecker.h"
 #include "structures/LinearStructure.h"
 #include "CsvReportWriter.h"
-#include "research/TypeResearch.h"
+#include "research/ResearchRunner.h"
 
-enum class DataOrder {
-    Random,
-    Ascending,
-    Descending,
-    PartiallySorted
-};
 
 namespace {
     std::mt19937 rng(std::random_device{}());
@@ -197,44 +191,6 @@ void fillStructureWithRandomInts(Structure& structure, int size) {
     }
 }
 
-// Dodaje dane w wybranym ukladzie
-template <typename Structure>
-void fillStructure(Structure& structure, int size, DataOrder order) {
-    structure.clear();
-
-    if (order == DataOrder::Random) {
-        for (int i = 0; i < size; i++) {
-            structure.pushBack(randomInt());
-        }
-        return;
-    }
-
-    if (order == DataOrder::Ascending) {
-        for (int i = 0; i < size; i++) {
-            structure.pushBack(i);
-        }
-        return;
-    }
-
-    if (order == DataOrder::Descending) {
-        for (int i = size; i > 0; i--) {
-            structure.pushBack(i);
-        }
-        return;
-    }
-
-    for (int i = 0; i < size; i++) {
-        structure.pushBack(i);
-    }
-
-    int changes = size / 2;
-
-    for (int i = 0; i < changes; i++) {
-        std::uniform_int_distribution<int> indexDist(0, size - 1);
-        int index = indexDist(rng);
-        structure.set(index, randomInt());
-    }
-}
 
 // Tryb single dla struktury
 template <typename Structure>
@@ -373,104 +329,6 @@ bool runResearchForStructure() {
     return true;
 }
 
-// Badanie B dla struktury i ukladu
-template <typename Structure>
-bool runResearchForStructureWithOrder(DataOrder order,
-                                      const std::string& csvFile,
-                                      const std::string& structureName,
-                                      const std::string& orderName) {
-    int repetitions = Parameters::iterations;
-    int size = Parameters::structureSize;
-
-    if (repetitions <= 0) {
-        std::cout << "Niepoprawna liczba powtorzen.\n";
-        return false;
-    }
-
-    if (size <= 0) {
-        std::cout << "Niepoprawny rozmiar struktury.\n";
-        return false;
-    }
-
-    long long sum = 0;
-    long long minTime = std::numeric_limits<long long>::max();
-    long long maxTime = std::numeric_limits<long long>::min();
-
-    for (int i = 0; i < repetitions; i++) {
-        Structure structure;
-
-        fillStructure(structure, size, order);
-
-        auto startTime = std::chrono::high_resolution_clock::now();
-
-        if (structure.getSize() > 0) {
-            if (!sortStructure(structure)) {
-                std::cout << "Nieobslugiwany algorytm.\n";
-                return false;
-            }
-        }
-
-        auto endTime = std::chrono::high_resolution_clock::now();
-
-        long long duration =
-            std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-
-        if (!SortChecker::isSorted(structure)) {
-            std::cout << "Blad sortowania w powtorzeniu " << i + 1 << ".\n";
-            return false;
-        }
-
-        sum += duration;
-
-        if (duration < minTime) {
-            minTime = duration;
-        }
-
-        if (duration > maxTime) {
-            maxTime = duration;
-        }
-    }
-
-    double averageTime = static_cast<double>(sum) / repetitions;
-
-    std::cout << "Algorytm: " << getAlgorithmName(Parameters::algorithm) << "\n";
-    std::cout << "Struktura: " << structureName << "\n";
-    std::cout << "Uklad danych: " << orderName << "\n";
-    std::cout << "Sredni czas: " << averageTime << " mikrosekund\n";
-    std::cout << "Min czas: " << minTime << " mikrosekund\n";
-    std::cout << "Max czas: " << maxTime << " mikrosekund\n\n";
-
-    return CsvReportWriter::appendResult(csvFile,
-                                         getAlgorithmName(Parameters::algorithm),
-                                         structureName + "_" + orderName,
-                                         getVariantName(),
-                                         repetitions,
-                                         averageTime,
-                                         minTime,
-                                         maxTime);
-}
-
-// Badanie B
-    bool runResearchB(const std::string& csvFile) {
-        bool ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Random, csvFile, "array", "random");
-
-        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Ascending, csvFile, "array", "ascending") && ok;
-        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::Descending, csvFile, "array", "descending") && ok;
-        ok = runResearchForStructureWithOrder<DynamicArray>(DataOrder::PartiallySorted, csvFile, "array", "partial") && ok;
-
-        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Random, csvFile, "slist", "random") && ok;
-        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Ascending, csvFile, "slist", "ascending") && ok;
-        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::Descending, csvFile, "slist", "descending") && ok;
-        ok = runResearchForStructureWithOrder<SinglyLinkedList>(DataOrder::PartiallySorted, csvFile, "slist", "partial") && ok;
-
-        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Random, csvFile, "dlist", "random") && ok;
-        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Ascending, csvFile, "dlist", "ascending") && ok;
-        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::Descending, csvFile, "dlist", "descending") && ok;
-        ok = runResearchForStructureWithOrder<DoublyLinkedList>(DataOrder::PartiallySorted, csvFile, "dlist", "partial") && ok;
-
-        return ok;
-    }
-
 // Uruchamia single
 bool runSingleMode() {
     if (Parameters::structure == Parameters::Structures::array) {
@@ -524,7 +382,6 @@ bool runResearchMode() {
 }
 
 int main(int argc, char** argv) {
-
     int result = Parameters::readParameters(argc - 1, argv + 1);
 
     if (result != 0) {
@@ -538,33 +395,12 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    if (Parameters::runMode == Parameters::RunModes::benchmark &&
-        Parameters::algorithm == Parameters::Algorithms::quick &&
-        Parameters::structure == Parameters::Structures::array &&
-        Parameters::dataType == Parameters::DataTypes::typeString) {
-        return TypeResearch::run() ? 0 : 1;
-        }
-
-    if (Parameters::runMode == Parameters::RunModes::benchmark &&
-        Parameters::algorithm == Parameters::Algorithms::quick &&
-        Parameters::structure == Parameters::Structures::array &&
-        Parameters::dataType == Parameters::DataTypes::typeString) {
-        return TypeResearch::run() ? 0 : 1;
-        }
-
-    if (Parameters::runMode == Parameters::RunModes::benchmark &&
-        Parameters::algorithm == Parameters::Algorithms::quick &&
-        Parameters::structure == Parameters::Structures::array &&
-        Parameters::dataType == Parameters::DataTypes::typeInt) {
-        return runResearchB("B_results.csv") ? 0 : 1;
-        }
-
     if (Parameters::runMode == Parameters::RunModes::singleFile) {
         return runSingleMode() ? 0 : 1;
     }
 
     if (Parameters::runMode == Parameters::RunModes::benchmark) {
-        return runResearchMode() ? 0 : 1;
+        return ResearchRunner::runSelectedResearch() ? 0 : 1;
     }
 
     showHelp();

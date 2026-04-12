@@ -1,0 +1,8 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,22:41:18,quick,array_random,middle,20,1137.4,851,1353
+2026-04-12,22:41:18,quick,array_ascending,middle,20,227.4,215,232
+2026-04-12,22:41:18,quick,array_descending,middle,20,262.75,249,324
+2026-04-12,22:41:18,quick,array_partial,middle,20,1010.25,745,1662
+2026-04-12,22:41:36,quick,slist_random,middle,20,844990,456565,1328588
+2026-04-12,22:41:45,quick,slist_ascending,middle,20,413395,211974,748860
+2026-04-12,22:41:57,quick,slist_descending,middle,20,549486,242418,876469

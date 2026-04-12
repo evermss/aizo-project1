@@ -1,5 +1,7 @@
 #include "ResearchRunner.h"
 #include <iostream>
+#include "../include/Parameters.h"
+#include "TypeResearch.h"
 
 // Badanie alpha
 bool ResearchRunner::runAlphaResearch() {
@@ -29,4 +31,23 @@ bool ResearchRunner::runTypeResearch() {
 bool ResearchRunner::runOmegaResearch() {
     std::cout << "Uruchomiono badanie Omega.\n";
     return true;
+}
+
+// Wybiera odpowiednie badanie
+bool ResearchRunner::runSelectedResearch() {
+    if (Parameters::algorithm == Parameters::Algorithms::quick &&
+     Parameters::structure == Parameters::Structures::array &&
+     Parameters::dataType == Parameters::DataTypes::typeString) {
+        std::cout << "Uruchomiono badanie C.\n";
+        return TypeResearch::run();
+     }
+
+    if (Parameters::algorithm == Parameters::Algorithms::quick &&
+        Parameters::structure == Parameters::Structures::array &&
+        Parameters::dataType == Parameters::DataTypes::typeInt) {
+        std::cout << "Uruchomiono badanie B.\n";
+        return runDistributionResearch();
+        }
+
+    return false;
 }

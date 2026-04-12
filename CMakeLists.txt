@@ -20,12 +20,7 @@ add_executable(aizo-project1
         src/structures/BinarySearchTree.cpp
         src/structures/Stack.cpp
         src/research/ResearchRunner.cpp
-        src/structures/TemplateArray.h
-        src/algorithms/TemplateQuickSort.h
-        src/algorithms/TemplateSortChecker.h
         src/research/TypeResearch.cpp
-        src/research/TypeResearch.h
-
 )
 
 target_include_directories(aizo-project1 PRIVATE
