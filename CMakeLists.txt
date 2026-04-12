@@ -17,6 +17,10 @@ add_executable(aizo-project1
         src/BucketSorter.cpp
         src/SortChecker.cpp
         src/CsvReportWriter.cpp
+        src/BinarySearchTree.cpp
+        src/Stack.cpp
+        src/research/ResearchRunner.cpp
+
 )
 
 target_include_directories(aizo-project1 PRIVATE

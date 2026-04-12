@@ -1,0 +1,9 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,00:18:37,quick,array,random,20,2725.25,2419,2958
+2026-04-12,00:26:44,quick,array,random,20,2779.2,2535,3262
+2026-04-12,00:26:51,quick,array,left,20,2484.15,2360,2982
+2026-04-12,00:26:56,quick,array,middle,20,2425.7,2283,2769
+2026-04-12,00:27:07,shell,array,option1,20,4517.8,4194,5097
+2026-04-12,00:27:12,shell,array,option1,20,4447,3463,5505
+2026-04-12,00:30:22,shell,array,option1,20,4450.45,3614,5073
+2026-04-12,00:30:31,shell,array,option2,20,3836.25,2874,4801

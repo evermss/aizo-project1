@@ -1,0 +1,2 @@
+date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
+2026-04-12,00:23:28,quick,stack,middle,5,28787.2,24123,31888
