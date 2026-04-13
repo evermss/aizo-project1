@@ -15,6 +15,7 @@
 #include "algorithms/SortChecker.h"
 #include "research/ResearchRunner.h"
 
+// Wyswietla podstawowe informacje o programie i obslugiwanych opcjach.
 void showHelp() {
     std::cout << "=== AiZO Projekt 1 ===\n";
     std::cout << "Biblioteka parametrow: " << Parameters::getVersion() << "\n\n";
@@ -32,6 +33,7 @@ void showHelp() {
     std::cout << "  stack\n\n";
 }
 
+// Wypisuje elementy struktury liniowej na standardowe wyjscie.
 void printStructure(const LinearStructure& structure) {
     for (int i = 0; i < structure.getSize(); i++) {
         std::cout << structure.get(i) << " ";
@@ -39,6 +41,7 @@ void printStructure(const LinearStructure& structure) {
     std::cout << "\n";
 }
 
+// Mapuje parametr pivota z biblioteki prowadzacego na strategie quick sorta.
 QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     if (pivot == Parameters::Pivots::random) {
         return QuickPivotStrategy::Random;
@@ -51,6 +54,7 @@ QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     return QuickPivotStrategy::Middle;
 }
 
+// Mapuje parametr shella na wybrana strategie odstepow.
 ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     if (shellParameter == Parameters::ShellParameters::option2 ||
         shellParameter == Parameters::ShellParameters::option3 ||
@@ -61,6 +65,7 @@ ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     return ShellGapStrategy::Halving;
 }
 
+// Sortuje strukture w trybie single zgodnie z wybranym algorytmem.
 template <typename Structure>
 bool sortSingleStructure(Structure& structure) {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -83,6 +88,8 @@ bool sortSingleStructure(Structure& structure) {
     return false;
 }
 
+// Uruchamia pojedyncze sortowanie dla wskazanej struktury:
+// wczytuje dane z pliku, sortuje, sprawdza wynik i opcjonalnie zapisuje do pliku.
 template <typename Structure>
 bool runSingleForStructure() {
     Structure structure;
@@ -131,6 +138,7 @@ bool runSingleForStructure() {
     return true;
 }
 
+// Wybiera odpowiednia strukture danych dla trybu single.
 bool runSingleMode() {
     if (Parameters::structure == Parameters::Structures::array) {
         return runSingleForStructure<DynamicArray>();
@@ -156,6 +164,8 @@ bool runSingleMode() {
     return false;
 }
 
+// Punkt wejscia programu.
+// Odczytuje parametry i uruchamia odpowiedni tryb pracy.
 int main(int argc, char** argv) {
     const int result = Parameters::readParameters(argc - 1, argv + 1);
 

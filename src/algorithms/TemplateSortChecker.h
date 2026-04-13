@@ -3,6 +3,7 @@
 
 class TemplateSortChecker {
 public:
+    // Sprawdza, czy elementy w tablicy sa ulozone niemalejaco.
     template <typename ArrayType>
     static bool isSorted(const ArrayType& array) {
         for (int i = 0; i < array.getSize() - 1; i++) {

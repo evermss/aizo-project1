@@ -1,5 +1,5 @@
 date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
-2026-04-13,17:54:41,quick,array,middle,20,572.25,489,645
-2026-04-13,17:54:41,quick,array,middle,20,1076.95,868,1219
-2026-04-13,17:54:41,quick,array,middle,20,1907.1,1860,1981
-2026-04-13,17:54:41,quick,array,middle,20,4408.25,4005,5244
+2026-04-13,21:00:58,quick,array,middle,100,440.97,384,657
+2026-04-13,21:00:58,quick,array,middle,100,968.8,832,1229
+2026-04-13,21:00:59,quick,array,middle,100,1974.81,1829,2831
+2026-04-13,21:00:59,quick,array,middle,100,4445.43,3818,6256

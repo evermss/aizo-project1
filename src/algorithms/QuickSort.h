@@ -3,6 +3,7 @@
 
 class QuickSort {
 private:
+    // Zamienia miejscami dwa elementy w strukturze.
     template <typename Structure>
     static void swapValues(Structure& structure, int firstIndex, int secondIndex) {
         int temp = structure.get(firstIndex);
@@ -11,6 +12,7 @@ private:
     }
 
 public:
+    // Sortuje elementy metoda quick sort w zadanym zakresie indeksow.
     template <typename Structure>
     static void sort(Structure& structure, int left, int right) {
         if (structure.getSize() == 0 || left >= right) {

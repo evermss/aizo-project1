@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 
+// Wczytuje dane z pliku do struktury liniowej.
+// Pierwsza linia zawiera liczbe elementow, kolejne linie wartosci.
 bool FileLoader::loadFromFile(const std::string& fileName, LinearStructure& structure) {
     std::ifstream file(fileName);
 
@@ -35,6 +37,8 @@ bool FileLoader::loadFromFile(const std::string& fileName, LinearStructure& stru
     return true;
 }
 
+// Zapisuje strukture do pliku w tym samym formacie:
+// najpierw liczba elementow, potem kolejne wartosci.
 bool FileLoader::saveToFile(const std::string& fileName, const LinearStructure& structure) {
     std::ofstream file(fileName);
 

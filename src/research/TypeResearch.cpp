@@ -13,8 +13,10 @@
 #include "../CsvReportWriter.h"
 
 namespace {
+    // Generator liczb losowych uzywany w badaniu typow danych.
     static std::mt19937 rng(std::random_device{}());
 
+    // Zwraca losowa liczbe int z pelnego zakresu typu.
     int randomInt() {
         static std::uniform_int_distribution<int> dist(
             std::numeric_limits<int>::min(),
@@ -23,6 +25,7 @@ namespace {
         return dist(rng);
     }
 
+    // Zwraca losowa liczbe unsigned int z pelnego zakresu typu.
     unsigned int randomUnsignedInt() {
         static std::uniform_int_distribution<unsigned int> dist(
             std::numeric_limits<unsigned int>::min(),
@@ -31,6 +34,7 @@ namespace {
         return dist(rng);
     }
 
+    // Generuje losowy napis skladajacy sie z drukowalnych znakow ASCII.
     std::string randomString() {
         static std::uniform_int_distribution<int> lenDist(5, 12);
         static std::uniform_int_distribution<int> charDist(32, 126);
@@ -49,6 +53,7 @@ namespace {
     template <typename T>
     void fillArray(TemplateArray<T>& array, int size);
 
+    // Wypelnia tablice losowymi wartosciami typu int.
     template <>
     void fillArray<int>(TemplateArray<int>& array, int size) {
         for (int i = 0; i < size; i++) {
@@ -56,6 +61,7 @@ namespace {
         }
     }
 
+    // Wypelnia tablice losowymi wartosciami typu unsigned int.
     template <>
     void fillArray<unsigned int>(TemplateArray<unsigned int>& array, int size) {
         for (int i = 0; i < size; i++) {
@@ -63,6 +69,7 @@ namespace {
         }
     }
 
+    // Wypelnia tablice losowymi napisami.
     template <>
     void fillArray<std::string>(TemplateArray<std::string>& array, int size) {
         for (int i = 0; i < size; i++) {
@@ -70,6 +77,8 @@ namespace {
         }
     }
 
+    // Wykonuje badanie dla jednego typu danych:
+    // generuje dane, sortuje je, sprawdza poprawnosc i zapisuje wynik do CSV.
     template <typename T>
     bool runTypeCase(const std::string& typeName,
                      const std::string& csvFile,
@@ -137,6 +146,7 @@ namespace {
     }
 }
 
+// Uruchamia badanie C, czyli porownanie czasu sortowania dla roznych typow danych w szablonowej tablicy.
 bool TypeResearch::run() {
     const std::string csvFile = Parameters::resultsFile.empty()
         ? "C_results.csv"

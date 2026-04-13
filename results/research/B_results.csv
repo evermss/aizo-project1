@@ -1,13 +1,5 @@
 date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
-2026-04-12,20:04:36,quick,array_random,middle,20,1174,1128,1294
-2026-04-12,20:04:36,quick,array_ascending,middle,20,298,283,371
-2026-04-12,20:04:36,quick,array_descending,middle,20,330.75,309,427
-2026-04-12,20:04:36,quick,array_partial,middle,20,1010.9,899,1302
-2026-04-12,20:05:00,quick,slist_random,middle,20,1.14031e+06,785295,1573818
-2026-04-12,20:05:14,quick,slist_ascending,middle,20,591797,382884,863978
-2026-04-12,20:05:29,quick,slist_descending,middle,20,660394,433509,886508
-2026-04-12,20:05:55,quick,slist_partial,middle,20,1.19966e+06,741908,1807164
-2026-04-12,20:06:06,quick,dlist_random,middle,20,543508,388399,730666
-2026-04-12,20:06:12,quick,dlist_ascending,middle,20,258615,190221,343394
-2026-04-12,20:06:19,quick,dlist_descending,middle,20,301450,215291,397176
-2026-04-12,20:06:30,quick,dlist_partial,middle,20,525944,357862,735067
+2026-04-13,21:01:12,quick,array,middle,100,2019.05,1786,2570
+2026-04-13,21:01:12,quick,array,middle,100,537.34,501,735
+2026-04-13,21:01:12,quick,array,middle,100,474.2,445,557
+2026-04-13,21:01:12,quick,array,middle,100,1544.1,1379,1904

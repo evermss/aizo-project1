@@ -3,6 +3,7 @@
 
 #include <random>
 
+// Okresla sposob wyboru pivota w szablonowym quick sorcie.
 enum class TemplatePivotStrategy {
     Random,
     Middle
@@ -10,12 +11,14 @@ enum class TemplatePivotStrategy {
 
 class TemplateQuickSort {
 private:
+    // Zwraca losowy indeks pivota z zadanego zakresu.
     static int randomPivotIndex(int left, int right) {
         static std::mt19937 rng(std::random_device{}());
         std::uniform_int_distribution<int> dist(left, right);
         return dist(rng);
     }
 
+    // Wybiera indeks pivota zgodnie z podana strategia.
     static int choosePivotIndex(int left, int right, TemplatePivotStrategy strategy) {
         if (strategy == TemplatePivotStrategy::Random) {
             return randomPivotIndex(left, right);
@@ -25,6 +28,7 @@ private:
     }
 
 public:
+    // Sortuje tablice szablonowa metoda quick sort w zadanym zakresie.
     template <typename ArrayType>
     static void sort(ArrayType& array, int left, int right, TemplatePivotStrategy strategy) {
         if (left >= right) {

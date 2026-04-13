@@ -21,6 +21,7 @@
 
 namespace {
 
+// Okresla uklad danych wejsciowych dla badania B.
 enum class DataLayout {
     Random,
     Ascending,
@@ -28,10 +29,13 @@ enum class DataLayout {
     HalfSorted
 };
 
+// Aktualnie wybrany uklad danych dla badan.
 DataLayout currentLayout = DataLayout::Random;
 
+// Generator liczb losowych uzywany w badaniach.
 std::mt19937 rng(std::random_device{}());
 
+// Zwraca losowa liczbe int z pelnego zakresu typu.
 int randomIntFullRange() {
     static std::uniform_int_distribution<int> dist(
         std::numeric_limits<int>::min(),
@@ -40,6 +44,7 @@ int randomIntFullRange() {
     return dist(rng);
 }
 
+// Mapuje parametr pivota z biblioteki prowadzacego na strategie quick sorta.
 QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     if (pivot == Parameters::Pivots::random) {
         return QuickPivotStrategy::Random;
@@ -52,6 +57,7 @@ QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     return QuickPivotStrategy::Middle;
 }
 
+// Mapuje parametr shella na wybrana strategie odstepow.
 ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     if (shellParameter == Parameters::ShellParameters::option2 ||
         shellParameter == Parameters::ShellParameters::option3 ||
@@ -62,6 +68,7 @@ ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     return ShellGapStrategy::Halving;
 }
 
+// Zwraca nazwe aktualnie wybranego algorytmu.
 std::string getAlgorithmName() {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
         return "quick";
@@ -78,6 +85,7 @@ std::string getAlgorithmName() {
     return "unknown";
 }
 
+// Zwraca nazwe aktualnie wybranej struktury danych.
 std::string getStructureName() {
     if (Parameters::structure == Parameters::Structures::array) {
         return "array";
@@ -102,6 +110,7 @@ std::string getStructureName() {
     return "unknown";
 }
 
+// Zwraca nazwe ukladu danych dla badania B.
 std::string getLayoutName(DataLayout layout) {
     if (layout == DataLayout::Random) {
         return "random";
@@ -118,6 +127,7 @@ std::string getLayoutName(DataLayout layout) {
     return "half_sorted";
 }
 
+// Zwraca nazwe wariantu badanego przypadku.
 std::string getVariantName() {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
         if (Parameters::pivot == Parameters::Pivots::random) {
@@ -154,6 +164,7 @@ std::string getVariantName() {
     return getLayoutName(currentLayout);
 }
 
+// Wypelnia strukture danymi zgodnie z wybranym ukladem.
 template <typename Structure>
 void fillStructure(Structure& structure, int size, DataLayout layout) {
     structure.clear();
@@ -190,6 +201,7 @@ void fillStructure(Structure& structure, int size, DataLayout layout) {
     }
 }
 
+// Sortuje strukture zgodnie z aktualnie wybranym algorytmem.
 template <typename Structure>
 bool sortStructure(Structure& structure) {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -212,6 +224,7 @@ bool sortStructure(Structure& structure) {
     return false;
 }
 
+// Wykonuje pojedynczy pomiar czasu sortowania dla wybranej struktury.
 template <typename Structure>
 long long measureCase() {
     Structure structure;
@@ -238,12 +251,14 @@ long long measureCase() {
            ).count();
 }
 
+// Sprawdza, czy nazwa pliku wynikowego zawiera podany fragment.
 bool fileNameContains(const std::string& text) {
     return Parameters::resultsFile.find(text) != std::string::npos;
 }
 
 }  // namespace
 
+// Wykonuje pojedynczy przypadek benchmarku wielokrotnie, oblicza sredni czas oraz min i max, a nastepnie zapisuje wynik do CSV.
 bool ResearchRunner::runSingleBenchmarkCase() {
     const int repetitions = Parameters::iterations;
     const int size = Parameters::structureSize;
@@ -327,6 +342,7 @@ bool ResearchRunner::runSingleBenchmarkCase() {
     return true;
 }
 
+// Uruchamia badanie alpha: dla quick porownuje rozne pivoty, a dla shella rozne strategie odstepow.
 bool ResearchRunner::runAlphaResearch() {
     bool allOk = true;
 
@@ -359,6 +375,7 @@ bool ResearchRunner::runAlphaResearch() {
     return allOk;
 }
 
+// Uruchamia badanie A, czyli porownanie czasow dla roznych rozmiarow danych.
 bool ResearchRunner::runSizeResearch() {
     const int originalSize = Parameters::structureSize;
 
@@ -387,6 +404,7 @@ bool ResearchRunner::runSizeResearch() {
     return allOk;
 }
 
+// Uruchamia badanie B, czyli porownanie roznych ukladow danych wejsciowych.
 bool ResearchRunner::runDistributionResearch() {
     const DataLayout layouts[] = {
         DataLayout::Random,
@@ -409,10 +427,12 @@ bool ResearchRunner::runDistributionResearch() {
     return allOk;
 }
 
+// Uruchamia badanie C, czyli porownanie roznych typow danych.
 bool ResearchRunner::runTypeResearch() {
     return TypeResearch::run();
 }
 
+// Uruchamia badanie omega, czyli porownanie kilku struktur danych
 bool ResearchRunner::runOmegaResearch() {
     const Parameters::Structures originalStructure = Parameters::structure;
     bool allOk = true;
@@ -436,6 +456,7 @@ bool ResearchRunner::runOmegaResearch() {
     return allOk;
 }
 
+// Wybiera odpowiednie badanie na podstawie nazwy pliku wynikowego.
 bool ResearchRunner::runSelectedResearch() {
     if (fileNameContains("alpha")) {
         return runAlphaResearch();
