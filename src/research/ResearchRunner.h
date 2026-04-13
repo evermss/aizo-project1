@@ -9,6 +9,9 @@ public:
     static bool runTypeResearch();
     static bool runOmegaResearch();
     static bool runSelectedResearch();
+
+private:
+    static bool runSingleBenchmarkCase();
 };
 
 #endif
