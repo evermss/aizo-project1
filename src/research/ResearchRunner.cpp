@@ -127,8 +127,17 @@ std::string getLayoutName(DataLayout layout) {
     return "half_sorted";
 }
 
+// Sprawdza, czy nazwa pliku wynikowego zawiera podany fragment.
+bool fileNameContains(const std::string& text) {
+    return Parameters::resultsFile.find(text) != std::string::npos;
+}
+
 // Zwraca nazwe wariantu badanego przypadku.
 std::string getVariantName() {
+    if (fileNameContains("B_") || fileNameContains("B.") || fileNameContains("distribution")) {
+        return getLayoutName(currentLayout);
+    }
+
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
         if (Parameters::pivot == Parameters::Pivots::random) {
             return "random";
@@ -251,14 +260,10 @@ long long measureCase() {
            ).count();
 }
 
-// Sprawdza, czy nazwa pliku wynikowego zawiera podany fragment.
-bool fileNameContains(const std::string& text) {
-    return Parameters::resultsFile.find(text) != std::string::npos;
-}
-
 }  // namespace
 
-// Wykonuje pojedynczy przypadek benchmarku wielokrotnie, oblicza sredni czas oraz min i max, a nastepnie zapisuje wynik do CSV.
+// Wykonuje pojedynczy przypadek benchmarku wielokrotnie,
+// oblicza sredni czas oraz min i max, a nastepnie zapisuje wynik do CSV.
 bool ResearchRunner::runSingleBenchmarkCase() {
     const int repetitions = Parameters::iterations;
     const int size = Parameters::structureSize;
@@ -342,7 +347,8 @@ bool ResearchRunner::runSingleBenchmarkCase() {
     return true;
 }
 
-// Uruchamia badanie alpha: dla quick porownuje rozne pivoty, a dla shella rozne strategie odstepow.
+// Uruchamia badanie alpha:
+// dla quick porownuje rozne pivoty, a dla shella rozne strategie odstepow.
 bool ResearchRunner::runAlphaResearch() {
     bool allOk = true;
 
@@ -432,7 +438,7 @@ bool ResearchRunner::runTypeResearch() {
     return TypeResearch::run();
 }
 
-// Uruchamia badanie omega, czyli porownanie kilku struktur danych
+// Uruchamia badanie omega, czyli porownanie kilku struktur danych.
 bool ResearchRunner::runOmegaResearch() {
     const Parameters::Structures originalStructure = Parameters::structure;
     bool allOk = true;

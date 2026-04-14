@@ -16,15 +16,6 @@ namespace {
     // Generator liczb losowych uzywany w badaniu typow danych.
     static std::mt19937 rng(std::random_device{}());
 
-    // Zwraca losowa liczbe int z pelnego zakresu typu.
-    int randomInt() {
-        static std::uniform_int_distribution<int> dist(
-            std::numeric_limits<int>::min(),
-            std::numeric_limits<int>::max()
-        );
-        return dist(rng);
-    }
-
     // Zwraca losowa liczbe unsigned int z pelnego zakresu typu.
     unsigned int randomUnsignedInt() {
         static std::uniform_int_distribution<unsigned int> dist(
@@ -34,7 +25,15 @@ namespace {
         return dist(rng);
     }
 
-    // Generuje losowy napis skladajacy sie z drukowalnych znakow ASCII.
+    // Zwraca losowa liczbe typu double z wybranego zakresu.
+    double randomDouble() {
+        static std::uniform_real_distribution<double> dist(
+            -1000000.0,
+            1000000.0
+        );
+        return dist(rng);
+    }
+
     std::string randomString() {
         static std::uniform_int_distribution<int> lenDist(5, 12);
         static std::uniform_int_distribution<int> charDist(32, 126);
@@ -53,19 +52,19 @@ namespace {
     template <typename T>
     void fillArray(TemplateArray<T>& array, int size);
 
-    // Wypelnia tablice losowymi wartosciami typu int.
-    template <>
-    void fillArray<int>(TemplateArray<int>& array, int size) {
-        for (int i = 0; i < size; i++) {
-            array.pushBack(randomInt());
-        }
-    }
-
     // Wypelnia tablice losowymi wartosciami typu unsigned int.
     template <>
     void fillArray<unsigned int>(TemplateArray<unsigned int>& array, int size) {
         for (int i = 0; i < size; i++) {
             array.pushBack(randomUnsignedInt());
+        }
+    }
+
+    // Wypelnia tablice losowymi wartosciami typu double.
+    template <>
+    void fillArray<double>(TemplateArray<double>& array, int size) {
+        for (int i = 0; i < size; i++) {
+            array.pushBack(randomDouble());
         }
     }
 
@@ -77,8 +76,7 @@ namespace {
         }
     }
 
-    // Wykonuje badanie dla jednego typu danych:
-    // generuje dane, sortuje je, sprawdza poprawnosc i zapisuje wynik do CSV.
+    // Wykonuje badanie dla jednego typu danych: generuje
     template <typename T>
     bool runTypeCase(const std::string& typeName,
                      const std::string& csvFile,
@@ -146,7 +144,7 @@ namespace {
     }
 }
 
-// Uruchamia badanie C, czyli porownanie czasu sortowania dla roznych typow danych w szablonowej tablicy.
+// Uruchamia badanie C, czyli porownanie czasu sortowania
 bool TypeResearch::run() {
     const std::string csvFile = Parameters::resultsFile.empty()
         ? "C_results.csv"
@@ -157,7 +155,7 @@ bool TypeResearch::run() {
 
     bool ok = true;
 
-    ok = runTypeCase<int>("int", csvFile, size, repetitions) && ok;
+    ok = runTypeCase<double>("double", csvFile, size, repetitions) && ok;
     ok = runTypeCase<unsigned int>("unsigned_int", csvFile, size, repetitions) && ok;
     ok = runTypeCase<std::string>("string", csvFile, size, repetitions) && ok;
 
