@@ -1,16 +1,11 @@
 # AiZO Projekt 1
 
-Projekt z przedmiotu Algorytmy i Złożoność Obliczeniowa.
+Projekt z przedmiotu **Algorytmy i Złożoność Obliczeniowa**.
 
-## Zakres projektu
-Projekt obejmuje:
-- implementację własnych struktur danych,
-- implementację algorytmów sortowania,
-- obsługę parametrów programu z użyciem biblioteki prowadzącego,
-- tryb pojedynczego testu,
-- tryb badań,
-- zapis wyników do plików CSV,
-- analizę wyników badań.
+Program umożliwia:
+- sortowanie danych z pliku,
+- uruchamianie badań porównawczych,
+- zapis wyników do pliku CSV.
 
 ## Zaimplementowane algorytmy
 - Quick Sort
@@ -21,19 +16,28 @@ Projekt obejmuje:
 - Dynamic Array
 - Singly Linked List
 - Doubly Linked List
-- Binary Search Tree
 - Stack
+- Binary Search Tree
 
-## Tryby programu
-Program obsługuje trzy tryby:
-- --help
-- --singleFile
-- --benchmark
+## Uwagi o strukturach
+W trybie `single` i w zwykłych badaniach wykorzystywane są liniowe struktury danych:
+- array
+- singleList
+- doubleList
+- stack
 
-Parametry są odczytywane z użyciem biblioteki udostępnionej przez prowadzącego.
+`binaryTree` jest używane tylko w badaniu **omega** jako struktura nieliniowa.
 
-## Plik wejściowy
-Plik wejściowy ma format:
+## Wymagania
+- C++17
+- CMake
+- biblioteka prowadzącego `libparameters.so`
+
+## Budowanie projektu
+
+```bash
+cmake -S . -B build
+cmake --build build
 
 ```text
 5

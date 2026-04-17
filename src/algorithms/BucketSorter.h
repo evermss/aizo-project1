@@ -1,8 +1,8 @@
 #ifndef BUCKETSORTER_H
 #define BUCKETSORTER_H
 
-#include "../structures/LinearStructure.h"
-#include "../structures/DynamicArray.h"
+#include "structures/LinearStructure.h"
+#include "structures/DynamicArray.h"
 
 class BucketSorter {
 private:

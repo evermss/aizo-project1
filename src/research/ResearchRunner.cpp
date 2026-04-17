@@ -6,36 +6,24 @@
 #include <random>
 #include <string>
 
-#include "../include/Parameters.h"
-#include "../CsvReportWriter.h"
-#include "../algorithms/BucketSorter.h"
-#include "../algorithms/QuickSorter.h"
-#include "../algorithms/ShellSorter.h"
-#include "../algorithms/SortChecker.h"
-#include "../structures/BinarySearchTree.h"
-#include "../structures/DoublyLinkedList.h"
-#include "../structures/DynamicArray.h"
-#include "../structures/SinglyLinkedList.h"
-#include "../structures/Stack.h"
+#include "Parameters.h"
+#include "CsvReportWriter.h"
+#include "algorithms/BucketSorter.h"
+#include "algorithms/QuickSorter.h"
+#include "algorithms/ShellSorter.h"
+#include "algorithms/SortChecker.h"
+#include "structures/BinarySearchTree.h"
+#include "structures/DoublyLinkedList.h"
+#include "structures/DynamicArray.h"
+#include "structures/SinglyLinkedList.h"
+#include "structures/Stack.h"
 #include "TypeResearch.h"
 
 namespace {
 
-// Okresla uklad danych wejsciowych dla badania B.
-enum class DataLayout {
-    Random,
-    Ascending,
-    Descending,
-    HalfSorted
-};
-
-// Aktualnie wybrany uklad danych dla badan.
-DataLayout currentLayout = DataLayout::Random;
-
-// Generator liczb losowych uzywany w badaniach.
+Parameters::Distribution currentLayout = Parameters::Distribution::random;
 std::mt19937 rng(std::random_device{}());
 
-// Zwraca losowa liczbe int z pelnego zakresu typu.
 int randomIntFullRange() {
     static std::uniform_int_distribution<int> dist(
         std::numeric_limits<int>::min(),
@@ -44,7 +32,6 @@ int randomIntFullRange() {
     return dist(rng);
 }
 
-// Mapuje parametr pivota z biblioteki prowadzacego na strategie quick sorta.
 QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     if (pivot == Parameters::Pivots::random) {
         return QuickPivotStrategy::Random;
@@ -57,7 +44,6 @@ QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     return QuickPivotStrategy::Middle;
 }
 
-// Mapuje parametr shella na wybrana strategie odstepow.
 ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     if (shellParameter == Parameters::ShellParameters::option2 ||
         shellParameter == Parameters::ShellParameters::option3 ||
@@ -68,7 +54,6 @@ ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     return ShellGapStrategy::Halving;
 }
 
-// Zwraca nazwe aktualnie wybranego algorytmu.
 std::string getAlgorithmName() {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
         return "quick";
@@ -85,7 +70,6 @@ std::string getAlgorithmName() {
     return "unknown";
 }
 
-// Zwraca nazwe aktualnie wybranej struktury danych.
 std::string getStructureName() {
     if (Parameters::structure == Parameters::Structures::array) {
         return "array";
@@ -110,32 +94,33 @@ std::string getStructureName() {
     return "unknown";
 }
 
-// Zwraca nazwe ukladu danych dla badania B.
-std::string getLayoutName(DataLayout layout) {
-    if (layout == DataLayout::Random) {
+std::string getLayoutName(Parameters::Distribution layout) {
+    if (layout == Parameters::Distribution::random) {
         return "random";
     }
 
-    if (layout == DataLayout::Ascending) {
+    if (layout == Parameters::Distribution::ascending) {
         return "ascending";
     }
 
-    if (layout == DataLayout::Descending) {
+    if (layout == Parameters::Distribution::descending) {
         return "descending";
     }
 
-    return "half_sorted";
+    if (layout == Parameters::Distribution::ascending50Per) {
+        return "ascending50Per";
+    }
+
+    return "undefined";
 }
 
-// Sprawdza, czy nazwa pliku wynikowego zawiera podany fragment.
 bool fileNameContains(const std::string& text) {
     return Parameters::resultsFile.find(text) != std::string::npos;
 }
 
-// Zwraca nazwe wariantu badanego przypadku.
 std::string getVariantName() {
-    if (fileNameContains("B_") || fileNameContains("B.") || fileNameContains("distribution")) {
-        return getLayoutName(currentLayout);
+    if (Parameters::distribution != Parameters::Distribution::undefined) {
+        return getLayoutName(Parameters::distribution);
     }
 
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -173,26 +158,25 @@ std::string getVariantName() {
     return getLayoutName(currentLayout);
 }
 
-// Wypelnia strukture danymi zgodnie z wybranym ukladem.
 template <typename Structure>
-void fillStructure(Structure& structure, int size, DataLayout layout) {
+void fillStructure(Structure& structure, int size, Parameters::Distribution layout) {
     structure.clear();
 
-    if (layout == DataLayout::Random) {
+    if (layout == Parameters::Distribution::random) {
         for (int i = 0; i < size; i++) {
             structure.pushBack(randomIntFullRange());
         }
         return;
     }
 
-    if (layout == DataLayout::Ascending) {
+    if (layout == Parameters::Distribution::ascending) {
         for (int i = 0; i < size; i++) {
             structure.pushBack(i);
         }
         return;
     }
 
-    if (layout == DataLayout::Descending) {
+    if (layout == Parameters::Distribution::descending) {
         for (int i = size; i > 0; i--) {
             structure.pushBack(i);
         }
@@ -210,7 +194,6 @@ void fillStructure(Structure& structure, int size, DataLayout layout) {
     }
 }
 
-// Sortuje strukture zgodnie z aktualnie wybranym algorytmem.
 template <typename Structure>
 bool sortStructure(Structure& structure) {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -233,7 +216,6 @@ bool sortStructure(Structure& structure) {
     return false;
 }
 
-// Wykonuje pojedynczy pomiar czasu sortowania dla wybranej struktury.
 template <typename Structure>
 long long measureCase() {
     Structure structure;
@@ -260,11 +242,91 @@ long long measureCase() {
            ).count();
 }
 
-}  // namespace
+// Drzewo mierzymy osobno tylko w omega.
+long long measureBinaryTreeCase() {
+    BinarySearchTree tree;
+    const int size = Parameters::structureSize;
 
-// Wykonuje pojedynczy przypadek benchmarku wielokrotnie,
-// oblicza sredni czas oraz min i max, a nastepnie zapisuje wynik do CSV.
+    const auto startTime = std::chrono::high_resolution_clock::now();
+
+    fillStructure(tree, size, currentLayout);
+
+    const auto endTime = std::chrono::high_resolution_clock::now();
+
+    if (!SortChecker::isSorted(tree)) {
+        std::cout << "Blad drzewa binarnego.\n";
+        return -1;
+    }
+
+    return std::chrono::duration_cast<std::chrono::microseconds>(
+               endTime - startTime
+           ).count();
+}
+
+bool saveBinaryTreeOmegaResult() {
+    long long sum = 0;
+    long long minTime = std::numeric_limits<long long>::max();
+    long long maxTime = std::numeric_limits<long long>::min();
+
+    for (int i = 0; i < Parameters::iterations; i++) {
+        long long duration = measureBinaryTreeCase();
+
+        if (duration < 0) {
+            return false;
+        }
+
+        sum += duration;
+
+        if (duration < minTime) {
+            minTime = duration;
+        }
+
+        if (duration > maxTime) {
+            maxTime = duration;
+        }
+    }
+
+    const double averageTime = static_cast<double>(sum) / Parameters::iterations;
+
+    std::cout << "\n=== TRYB BADAN ===\n";
+    std::cout << "Algorytm: tree_build\n";
+    std::cout << "Struktura: binary_tree\n";
+    std::cout << "Wariant: omega\n";
+    std::cout << "Rozmiar: " << Parameters::structureSize << "\n";
+    std::cout << "Powtorzenia: " << Parameters::iterations << "\n";
+    std::cout << "Sredni czas: " << averageTime << " mikrosekund\n";
+    std::cout << "Min czas: " << minTime << " mikrosekund\n";
+    std::cout << "Max czas: " << maxTime << " mikrosekund\n";
+
+    if (!Parameters::resultsFile.empty()) {
+        if (!CsvReportWriter::appendResult(
+                Parameters::resultsFile,
+                "tree_build",
+                "binary_tree",
+                "omega",
+                Parameters::structureSize,
+                Parameters::iterations,
+                averageTime,
+                minTime,
+                maxTime)) {
+            std::cout << "Nie udalo sie zapisac CSV dla binaryTree.\n";
+            return false;
+        }
+
+        std::cout << "Wynik zapisano do CSV: " << Parameters::resultsFile << "\n";
+    }
+
+    return true;
+}
+
+}
+
+// Wykonuje jeden przypadek badawczy wiele razy i zapisuje wynik.
 bool ResearchRunner::runSingleBenchmarkCase() {
+    if (Parameters::distribution != Parameters::Distribution::undefined) {
+        currentLayout = Parameters::distribution;
+    }
+
     const int repetitions = Parameters::iterations;
     const int size = Parameters::structureSize;
 
@@ -292,7 +354,8 @@ bool ResearchRunner::runSingleBenchmarkCase() {
         } else if (Parameters::structure == Parameters::Structures::doubleList) {
             duration = measureCase<DoublyLinkedList>();
         } else if (Parameters::structure == Parameters::Structures::binaryTree) {
-            duration = measureCase<BinarySearchTree>();
+            std::cout << "binaryTree jest przeznaczone tylko do badania omega.\n";
+            return false;
         } else if (Parameters::structure == Parameters::Structures::stack) {
             duration = measureCase<Stack>();
         } else {
@@ -333,6 +396,7 @@ bool ResearchRunner::runSingleBenchmarkCase() {
                 getAlgorithmName(),
                 getStructureName(),
                 getVariantName(),
+                size,
                 repetitions,
                 averageTime,
                 minTime,
@@ -347,13 +411,15 @@ bool ResearchRunner::runSingleBenchmarkCase() {
     return true;
 }
 
-// Uruchamia badanie alpha:
-// dla quick porownuje rozne pivoty, a dla shella rozne strategie odstepow.
+// Badanie alpha: quick testuje pivoty, shell testuje warianty odstepow.
 bool ResearchRunner::runAlphaResearch() {
     bool allOk = true;
 
     const Parameters::Pivots originalPivot = Parameters::pivot;
     const Parameters::ShellParameters originalShellParameter = Parameters::shellParameter;
+    const Parameters::Distribution originalDistribution = Parameters::distribution;
+
+    Parameters::distribution = Parameters::Distribution::undefined;
 
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
         Parameters::pivot = Parameters::Pivots::random;
@@ -377,13 +443,18 @@ bool ResearchRunner::runAlphaResearch() {
 
     Parameters::pivot = originalPivot;
     Parameters::shellParameter = originalShellParameter;
+    Parameters::distribution = originalDistribution;
 
     return allOk;
 }
 
-// Uruchamia badanie A, czyli porownanie czasow dla roznych rozmiarow danych.
+// Badanie A: porownanie czasu dla roznych rozmiarow danych.
 bool ResearchRunner::runSizeResearch() {
     const int originalSize = Parameters::structureSize;
+    const Parameters::Distribution originalDistribution = Parameters::distribution;
+
+    Parameters::distribution = Parameters::Distribution::undefined;
+    currentLayout = Parameters::Distribution::random;
 
     const int sizes[] = {
         originalSize / 4,
@@ -407,41 +478,62 @@ bool ResearchRunner::runSizeResearch() {
     }
 
     Parameters::structureSize = originalSize;
-    return allOk;
-}
+    Parameters::distribution = originalDistribution;
 
-// Uruchamia badanie B, czyli porownanie roznych ukladow danych wejsciowych.
-bool ResearchRunner::runDistributionResearch() {
-    const DataLayout layouts[] = {
-        DataLayout::Random,
-        DataLayout::Descending,
-        DataLayout::Ascending,
-        DataLayout::HalfSorted
-    };
-
-    bool allOk = true;
-
-    for (const DataLayout layout : layouts) {
-        currentLayout = layout;
-
-        if (!runSingleBenchmarkCase()) {
-            allOk = false;
-        }
+    if (originalDistribution != Parameters::Distribution::undefined) {
+        currentLayout = originalDistribution;
+    } else {
+        currentLayout = Parameters::Distribution::random;
     }
 
-    currentLayout = DataLayout::Random;
     return allOk;
 }
 
-// Uruchamia badanie C, czyli porownanie roznych typow danych.
+// Badanie B: porownanie roznych ukladow danych wejsciowych.
+bool ResearchRunner::runDistributionResearch() {
+    const Parameters::Distribution originalDistribution = Parameters::distribution;
+    bool allOk = true;
+
+    Parameters::distribution = Parameters::Distribution::random;
+    currentLayout = Parameters::distribution;
+    allOk = runSingleBenchmarkCase() && allOk;
+
+    Parameters::distribution = Parameters::Distribution::descending;
+    currentLayout = Parameters::distribution;
+    allOk = runSingleBenchmarkCase() && allOk;
+
+    Parameters::distribution = Parameters::Distribution::ascending;
+    currentLayout = Parameters::distribution;
+    allOk = runSingleBenchmarkCase() && allOk;
+
+    Parameters::distribution = Parameters::Distribution::ascending50Per;
+    currentLayout = Parameters::distribution;
+    allOk = runSingleBenchmarkCase() && allOk;
+
+    Parameters::distribution = originalDistribution;
+
+    if (originalDistribution != Parameters::Distribution::undefined) {
+        currentLayout = originalDistribution;
+    } else {
+        currentLayout = Parameters::Distribution::random;
+    }
+
+    return allOk;
+}
+
+// Badanie C: porownanie dla roznych typow danych.
 bool ResearchRunner::runTypeResearch() {
     return TypeResearch::run();
 }
 
-// Uruchamia badanie omega, czyli porownanie kilku struktur danych.
+// Badanie omega: porownanie algorytmu na kilku strukturach.
 bool ResearchRunner::runOmegaResearch() {
     const Parameters::Structures originalStructure = Parameters::structure;
+    const Parameters::Distribution originalDistribution = Parameters::distribution;
     bool allOk = true;
+
+    Parameters::distribution = Parameters::Distribution::undefined;
+    currentLayout = Parameters::Distribution::random;
 
     Parameters::structure = Parameters::Structures::array;
     allOk = runSingleBenchmarkCase() && allOk;
@@ -452,18 +544,40 @@ bool ResearchRunner::runOmegaResearch() {
     Parameters::structure = Parameters::Structures::doubleList;
     allOk = runSingleBenchmarkCase() && allOk;
 
-    Parameters::structure = Parameters::Structures::binaryTree;
-    allOk = runSingleBenchmarkCase() && allOk;
+    allOk = saveBinaryTreeOmegaResult() && allOk;
 
     Parameters::structure = Parameters::Structures::stack;
     allOk = runSingleBenchmarkCase() && allOk;
 
     Parameters::structure = originalStructure;
+    Parameters::distribution = originalDistribution;
+
+    if (originalDistribution != Parameters::Distribution::undefined) {
+        currentLayout = originalDistribution;
+    } else {
+        currentLayout = Parameters::Distribution::random;
+    }
+
     return allOk;
 }
 
-// Wybiera odpowiednie badanie na podstawie nazwy pliku wynikowego.
+// Najpierw sprawdza parametry, a potem awaryjnie nazwe pliku.
 bool ResearchRunner::runSelectedResearch() {
+    if (Parameters::distribution != Parameters::Distribution::undefined) {
+        currentLayout = Parameters::distribution;
+        return runSingleBenchmarkCase();
+    }
+
+    if (Parameters::algorithm == Parameters::Algorithms::quick &&
+        Parameters::pivot != Parameters::Pivots::undefined) {
+        return runSingleBenchmarkCase();
+    }
+
+    if (Parameters::algorithm == Parameters::Algorithms::shell &&
+        Parameters::shellParameter != Parameters::ShellParameters::undefined) {
+        return runSingleBenchmarkCase();
+    }
+
     if (fileNameContains("alpha")) {
         return runAlphaResearch();
     }
@@ -472,31 +586,18 @@ bool ResearchRunner::runSelectedResearch() {
         return runOmegaResearch();
     }
 
-    if (fileNameContains("C_") || fileNameContains("C.")) {
+    if (fileNameContains("C_") || fileNameContains("C.") || fileNameContains("type")) {
         return runTypeResearch();
     }
 
-    if (fileNameContains("B_") || fileNameContains("B.")) {
+    if (fileNameContains("B_") || fileNameContains("B.") || fileNameContains("distribution")) {
         return runDistributionResearch();
     }
 
-    if (fileNameContains("A_") || fileNameContains("A.")) {
+    if (fileNameContains("A_") || fileNameContains("A.") || fileNameContains("size")) {
         return runSizeResearch();
     }
 
-    if (fileNameContains("type")) {
-        return runTypeResearch();
-    }
-
-    if (fileNameContains("distribution")) {
-        return runDistributionResearch();
-    }
-
-    if (fileNameContains("size")) {
-        return runSizeResearch();
-    }
-
-    std::cout << "Nie udalo sie rozpoznac badania z nazwy pliku wynikowego.\n";
-    std::cout << "Uzyj np. alpha_results.csv, A_results.csv, B_results.csv, C_results.csv albo omega_results.csv.\n";
+    std::cout << "Nie udalo sie rozpoznac badania.\n";
     return false;
 }

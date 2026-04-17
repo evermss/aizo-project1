@@ -6,7 +6,6 @@
 #include "structures/DynamicArray.h"
 #include "structures/SinglyLinkedList.h"
 #include "structures/DoublyLinkedList.h"
-#include "structures/BinarySearchTree.h"
 #include "structures/Stack.h"
 #include "structures/LinearStructure.h"
 #include "algorithms/QuickSorter.h"
@@ -15,7 +14,6 @@
 #include "algorithms/SortChecker.h"
 #include "research/ResearchRunner.h"
 
-// Wyswietla podstawowe informacje o programie i obslugiwanych opcjach.
 void showHelp() {
     std::cout << "=== AiZO Projekt 1 ===\n";
     std::cout << "Biblioteka parametrow: " << Parameters::getVersion() << "\n\n";
@@ -25,15 +23,15 @@ void showHelp() {
     std::cout << "  shell\n";
     std::cout << "  bucket\n\n";
 
-    std::cout << "Obslugiwane struktury:\n";
+    std::cout << "Obslugiwane struktury w trybie single:\n";
     std::cout << "  array\n";
     std::cout << "  singleList\n";
     std::cout << "  doubleList\n";
-    std::cout << "  binaryTree\n";
     std::cout << "  stack\n\n";
+
+    std::cout << "Struktura binaryTree jest uzywana tylko w badaniu omega.\n\n";
 }
 
-// Wypisuje elementy struktury liniowej na standardowe wyjscie.
 void printStructure(const LinearStructure& structure) {
     for (int i = 0; i < structure.getSize(); i++) {
         std::cout << structure.get(i) << " ";
@@ -41,7 +39,6 @@ void printStructure(const LinearStructure& structure) {
     std::cout << "\n";
 }
 
-// Mapuje parametr pivota z biblioteki prowadzacego na strategie quick sorta.
 QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     if (pivot == Parameters::Pivots::random) {
         return QuickPivotStrategy::Random;
@@ -54,7 +51,6 @@ QuickPivotStrategy mapPivot(Parameters::Pivots pivot) {
     return QuickPivotStrategy::Middle;
 }
 
-// Mapuje parametr shella na wybrana strategie odstepow.
 ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     if (shellParameter == Parameters::ShellParameters::option2 ||
         shellParameter == Parameters::ShellParameters::option3 ||
@@ -65,7 +61,6 @@ ShellGapStrategy mapShellParameter(Parameters::ShellParameters shellParameter) {
     return ShellGapStrategy::Halving;
 }
 
-// Sortuje strukture w trybie single zgodnie z wybranym algorytmem.
 template <typename Structure>
 bool sortSingleStructure(Structure& structure) {
     if (Parameters::algorithm == Parameters::Algorithms::quick) {
@@ -88,8 +83,7 @@ bool sortSingleStructure(Structure& structure) {
     return false;
 }
 
-// Uruchamia pojedyncze sortowanie dla wskazanej struktury:
-// wczytuje dane z pliku, sortuje, sprawdza wynik i opcjonalnie zapisuje do pliku.
+// Wczytuje dane, sortuje i opcjonalnie zapisuje wynik do pliku.
 template <typename Structure>
 bool runSingleForStructure() {
     Structure structure;
@@ -138,7 +132,6 @@ bool runSingleForStructure() {
     return true;
 }
 
-// Wybiera odpowiednia strukture danych dla trybu single.
 bool runSingleMode() {
     if (Parameters::structure == Parameters::Structures::array) {
         return runSingleForStructure<DynamicArray>();
@@ -153,7 +146,9 @@ bool runSingleMode() {
     }
 
     if (Parameters::structure == Parameters::Structures::binaryTree) {
-        return runSingleForStructure<BinarySearchTree>();
+        std::cout << "binaryTree nie jest obslugiwane w trybie single.\n";
+        std::cout << "Drzewo jest uzywane tylko w badaniu omega.\n";
+        return false;
     }
 
     if (Parameters::structure == Parameters::Structures::stack) {
@@ -164,8 +159,6 @@ bool runSingleMode() {
     return false;
 }
 
-// Punkt wejscia programu.
-// Odczytuje parametry i uruchamia odpowiedni tryb pracy.
 int main(int argc, char** argv) {
     const int result = Parameters::readParameters(argc - 1, argv + 1);
 
