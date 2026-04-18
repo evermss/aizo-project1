@@ -1,5 +1,0 @@
-date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
-2026-04-11,23:33:38,quick,array,middle,5,200.8,196,212
-2026-04-11,23:35:09,shell,array,option1,5,346.6,306,406
-2026-04-11,23:35:15,bucket,array,-,5,302.4,296,311
-2026-04-11,23:35:24,quick,array,random,5,234.2,214,276

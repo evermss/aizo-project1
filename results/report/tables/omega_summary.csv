@@ -1,0 +1,6 @@
+algorithm,structure,size,average_us,min_us,max_us
+quick,array,25000,4123.53,3242,4427
+tree_build,binary_tree,25000,6753.53,5427,8438
+quick,double_list,25000,9751610.0,6981427,12762145
+quick,single_list,25000,21055800.0,13656739,28623856
+quick,stack,25000,23595700.0,13783671,54013743

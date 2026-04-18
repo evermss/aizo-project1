@@ -1,0 +1,5 @@
+data_type_name,size,average_us,min_us,max_us
+int,25000,3165.13,2668,3387
+unsigned_int,25000,3305.07,3141,3586
+double,25000,3342.67,3185,3518
+string,25000,29568.0,26788,33945

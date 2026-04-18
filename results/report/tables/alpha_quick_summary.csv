@@ -1,0 +1,4 @@
+algorithm,structure,variant,size,average_us,min_us,max_us
+quick,array,left,25000,5749.07,3908,6037
+quick,array,random,25000,5800.83,3447,6538
+quick,array,middle,25000,5913.9,5664,6226

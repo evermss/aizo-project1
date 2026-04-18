@@ -1,0 +1,10 @@
+algorithm,structure,average_us
+quick,array,4243.37425
+shell,array,5878.84825
+bucket,array,105033.225
+bucket,double_list,2594585.375
+bucket,single_list,3481128.825
+quick,double_list,14837455.75
+quick,single_list,37578619.5
+shell,double_list,39439601.75
+shell,single_list,86361767.5

@@ -457,12 +457,11 @@ bool ResearchRunner::runSizeResearch() {
     currentLayout = Parameters::Distribution::random;
 
     const int sizes[] = {
-        originalSize / 4,
+        originalSize / 5,
         originalSize / 2,
         originalSize,
         originalSize * 2
     };
-
     bool allOk = true;
 
     for (const int size : sizes) {

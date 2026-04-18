@@ -1,0 +1,3 @@
+algorithm,structure,variant,size,average_us,min_us,max_us
+shell,array,option2,25000,9709.2,6167,12841
+shell,array,option1,25000,10490.1,7388,11722

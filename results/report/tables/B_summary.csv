@@ -1,0 +1,13 @@
+algorithm,structure,variant,size,average_us,min_us,max_us
+quick,array,ascending,25000,789.0,745,826
+quick,array,descending,25000,880.367,816,1002
+quick,array,ascending50Per,25000,2403.43,2296,2612
+quick,array,random,25000,3107.97,2912,4020
+quick,double_list,ascending,25000,4606990.0,3314202,5963733
+quick,double_list,descending,25000,5416870.0,3744012,7490147
+quick,double_list,ascending50Per,25000,9168230.0,6363940,12593156
+quick,double_list,random,25000,10203000.0,7221518,14462431
+quick,single_list,ascending,25000,9834360.0,6446137,13251700
+quick,single_list,descending,25000,11279500.0,7240819,15754104
+quick,single_list,ascending50Per,25000,18612500.0,11898155,25980677
+quick,single_list,random,25000,19572300.0,12412040,28015216

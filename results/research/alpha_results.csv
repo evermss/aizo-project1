@@ -1,6 +1,6 @@
-date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
-2026-04-13,21:47:28,quick,array,random,100,2328.69,1371,3083
-2026-04-13,21:47:28,quick,array,middle,100,3214.65,1935,6527
-2026-04-13,21:47:29,quick,array,left,100,2391.14,1122,6163
-2026-04-13,21:47:38,shell,array,option1,100,4889.46,2589,24126
-2026-04-13,21:47:38,shell,array,option2,100,3325,2002,5221
+date,time,algorithm,structure,variant,size,repetitions,data_type,distribution,pivot,shell_gap,average_us,min_us,max_us
+2026-04-18,09:38:15,quick,array,random,25000,30,int,undefined,random,undefined,5800.83,3447,6538
+2026-04-18,09:38:15,quick,array,middle,25000,30,int,undefined,middle,undefined,5913.9,5664,6226
+2026-04-18,09:38:16,quick,array,left,25000,30,int,undefined,left,undefined,5749.07,3908,6037
+2026-04-18,09:38:16,shell,array,option1,25000,30,int,undefined,undefined,option1,10490.1,7388,11722
+2026-04-18,09:38:16,shell,array,option2,25000,30,int,undefined,undefined,option2,9709.2,6167,12841

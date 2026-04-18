@@ -16,6 +16,14 @@ namespace {
 
 std::mt19937 rng(std::random_device{}());
 
+int randomInt() {
+    static std::uniform_int_distribution<int> dist(
+        std::numeric_limits<int>::min(),
+        std::numeric_limits<int>::max()
+    );
+    return dist(rng);
+}
+
 unsigned int randomUnsignedInt() {
     static std::uniform_int_distribution<unsigned int> dist(
         std::numeric_limits<unsigned int>::min(),
@@ -49,6 +57,13 @@ std::string randomString() {
 
 template <typename T>
 void fillArray(TemplateArray<T>& array, int size);
+
+template <>
+void fillArray<int>(TemplateArray<int>& array, int size) {
+    for (int i = 0; i < size; i++) {
+        array.pushBack(randomInt());
+    }
+}
 
 template <>
 void fillArray<unsigned int>(TemplateArray<unsigned int>& array, int size) {
@@ -140,7 +155,7 @@ bool runTypeCase(const std::string& typeName,
 
 } // namespace
 
-// Uruchamia badanie C, czyli porownanie czasu sortowania
+// Uruchamia badanie C, czyli porownanie czasu sortowania dla roznych typow danych.
 bool TypeResearch::run() {
     const std::string csvFile = Parameters::resultsFile.empty()
         ? "C_results.csv"
@@ -151,6 +166,7 @@ bool TypeResearch::run() {
 
     bool ok = true;
 
+    ok = runTypeCase<int>("int", csvFile, size, repetitions) && ok;
     ok = runTypeCase<double>("double", csvFile, size, repetitions) && ok;
     ok = runTypeCase<unsigned int>("unsigned_int", csvFile, size, repetitions) && ok;
     ok = runTypeCase<std::string>("string", csvFile, size, repetitions) && ok;
