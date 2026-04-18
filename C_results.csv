@@ -1,7 +1,0 @@
-date,time,algorithm,structure,variant,repetitions,average_us,min_us,max_us
-2026-04-12,23:04:33,quick,template_array_int,middle,20,1968.5,1576,2547
-2026-04-12,23:04:33,quick,template_array_unsigned_int,middle,20,1665.65,1603,1727
-2026-04-12,23:04:33,quick,template_array_string,middle,20,14095.9,12518,17165
-2026-04-12,23:12:19,quick,template_array_int,middle,20,2164.1,1968,2395
-2026-04-12,23:12:19,quick,template_array_unsigned_int,middle,20,2070.25,1609,2435
-2026-04-12,23:12:19,quick,template_array_string,middle,20,14272.9,12399,18405
