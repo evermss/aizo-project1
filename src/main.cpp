@@ -1,17 +1,26 @@
-#include <iostream>
 #include <chrono>
+#include <fstream>
+#include <iostream>
+#include <string>
 
-#include "Parameters.h"
+#include "include/Parameters.h"
 #include "FileLoader.h"
+
+#include "structures/TemplateArray.h"
 #include "structures/DynamicArray.h"
 #include "structures/SinglyLinkedList.h"
 #include "structures/DoublyLinkedList.h"
+#include "structures/BinarySearchTree.h"
 #include "structures/Stack.h"
 #include "structures/LinearStructure.h"
+
+#include "algorithms/TemplateQuickSort.h"
+#include "algorithms/TemplateSortChecker.h"
 #include "algorithms/QuickSorter.h"
 #include "algorithms/ShellSorter.h"
 #include "algorithms/BucketSorter.h"
 #include "algorithms/SortChecker.h"
+
 #include "research/ResearchRunner.h"
 
 void showHelp() {
@@ -27,13 +36,23 @@ void showHelp() {
     std::cout << "  array\n";
     std::cout << "  singleList\n";
     std::cout << "  doubleList\n";
+    std::cout << "  binaryTree\n";
     std::cout << "  stack\n\n";
 
-    std::cout << "Struktura binaryTree jest uzywana tylko w badaniu omega.\n\n";
+    std::cout << "Dla typow innych niz int w trybie single obslugiwana jest struktura array\n";
+    std::cout << "(TemplateArray).\n\n";
 }
 
 void printStructure(const LinearStructure& structure) {
-    for (int i = 0; i < structure.getSize(); i++) {
+    for (int i = 0; i < structure.getSize(); ++i) {
+        std::cout << structure.get(i) << " ";
+    }
+    std::cout << "\n";
+}
+
+template <typename T>
+void printTemplateStructure(const TemplateArray<T>& structure) {
+    for (int i = 0; i < structure.getSize(); ++i) {
         std::cout << structure.get(i) << " ";
     }
     std::cout << "\n";
@@ -83,7 +102,95 @@ bool sortSingleStructure(Structure& structure) {
     return false;
 }
 
-// Wczytuje dane, sortuje i opcjonalnie zapisuje wynik do pliku.
+template <typename T>
+bool loadTemplateArrayFromFile(const std::string& fileName, TemplateArray<T>& structure) {
+    std::ifstream file(fileName);
+
+    if (!file.is_open()) {
+        std::cout << "Blad otwarcia pliku: " << fileName << "\n";
+        return false;
+    }
+
+    int count = 0;
+    file >> count;
+    file.ignore();
+
+    if (file.fail() || count < 0) {
+        std::cout << "Niepoprawny format pliku.\n";
+        return false;
+    }
+
+    structure.clear();
+
+    for (int i = 0; i < count; ++i) {
+        T value;
+        file >> value;
+
+        if (file.fail()) {
+            std::cout << "Blad podczas wczytywania danych.\n";
+            return false;
+        }
+
+        structure.pushBack(value);
+    }
+
+    return true;
+}
+
+template <>
+bool loadTemplateArrayFromFile<std::string>(const std::string& fileName,
+                                            TemplateArray<std::string>& structure) {
+    std::ifstream file(fileName);
+
+    if (!file.is_open()) {
+        std::cout << "Blad otwarcia pliku: " << fileName << "\n";
+        return false;
+    }
+
+    int count = 0;
+    file >> count;
+    file.ignore();
+
+    if (file.fail() || count < 0) {
+        std::cout << "Niepoprawny format pliku.\n";
+        return false;
+    }
+
+    structure.clear();
+
+    for (int i = 0; i < count; ++i) {
+        std::string value;
+        std::getline(file, value);
+
+        if (value.empty()) {
+            --i;
+            continue;
+        }
+
+        structure.pushBack(value);
+    }
+
+    return true;
+}
+
+template <typename T>
+bool saveTemplateArrayToFile(const std::string& fileName, const TemplateArray<T>& structure) {
+    std::ofstream file(fileName);
+
+    if (!file.is_open()) {
+        std::cout << "Blad zapisu pliku: " << fileName << "\n";
+        return false;
+    }
+
+    file << structure.getSize() << "\n";
+
+    for (int i = 0; i < structure.getSize(); ++i) {
+        file << structure.get(i) << "\n";
+    }
+
+    return true;
+}
+
 template <typename Structure>
 bool runSingleForStructure() {
     Structure structure;
@@ -132,30 +239,100 @@ bool runSingleForStructure() {
     return true;
 }
 
-bool runSingleMode() {
-    if (Parameters::structure == Parameters::Structures::array) {
-        return runSingleForStructure<DynamicArray>();
-    }
+template <typename T>
+bool runSingleTemplateMode() {
+    TemplateArray<T> structure;
 
-    if (Parameters::structure == Parameters::Structures::singleList) {
-        return runSingleForStructure<SinglyLinkedList>();
-    }
-
-    if (Parameters::structure == Parameters::Structures::doubleList) {
-        return runSingleForStructure<DoublyLinkedList>();
-    }
-
-    if (Parameters::structure == Parameters::Structures::binaryTree) {
-        std::cout << "binaryTree nie jest obslugiwane w trybie single.\n";
-        std::cout << "Drzewo jest uzywane tylko w badaniu omega.\n";
+    if (!loadTemplateArrayFromFile(Parameters::inputFile, structure)) {
+        std::cout << "Blad wczytywania pliku.\n";
         return false;
     }
 
-    if (Parameters::structure == Parameters::Structures::stack) {
-        return runSingleForStructure<Stack>();
+    std::cout << "Dane przed sortowaniem:\n";
+    printTemplateStructure(structure);
+
+    const auto startTime = std::chrono::high_resolution_clock::now();
+
+    if (structure.getSize() > 0) {
+        TemplateQuickSort::sort(structure,
+                                0,
+                                structure.getSize() - 1,
+                                TemplatePivotStrategy::Middle);
     }
 
-    std::cout << "Nieobslugiwana struktura.\n";
+    const auto endTime = std::chrono::high_resolution_clock::now();
+    const auto duration =
+        std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+
+    std::cout << "Dane po sortowaniu:\n";
+    printTemplateStructure(structure);
+
+    if (!TemplateSortChecker::isSorted(structure)) {
+        std::cout << "Blad sortowania.\n";
+        return false;
+    }
+
+    std::cout << "Sortowanie poprawne.\n";
+    std::cout << "Czas sortowania: " << duration.count() << " mikrosekund\n";
+
+    if (!Parameters::outputFile.empty()) {
+        if (!saveTemplateArrayToFile(Parameters::outputFile, structure)) {
+            std::cout << "Nie udalo sie zapisac pliku.\n";
+            return false;
+        }
+
+        std::cout << "Zapisano wynik do pliku: " << Parameters::outputFile << "\n";
+    }
+
+    return true;
+}
+
+bool runSingleMode() {
+    if (Parameters::dataType == Parameters::DataTypes::typeInt) {
+        if (Parameters::structure == Parameters::Structures::array) {
+            return runSingleForStructure<DynamicArray>();
+        }
+
+        if (Parameters::structure == Parameters::Structures::singleList) {
+            return runSingleForStructure<SinglyLinkedList>();
+        }
+
+        if (Parameters::structure == Parameters::Structures::doubleList) {
+            return runSingleForStructure<DoublyLinkedList>();
+        }
+
+        if (Parameters::structure == Parameters::Structures::binaryTree) {
+            return runSingleForStructure<BinarySearchTree>();
+        }
+
+        if (Parameters::structure == Parameters::Structures::stack) {
+            return runSingleForStructure<Stack>();
+        }
+    }
+
+    if (Parameters::structure == Parameters::Structures::array) {
+        if (Parameters::dataType == Parameters::DataTypes::typeDouble) {
+            return runSingleTemplateMode<double>();
+        }
+
+        if (Parameters::dataType == Parameters::DataTypes::tyleUnsignedInt) {
+            return runSingleTemplateMode<unsigned int>();
+        }
+
+        if (Parameters::dataType == Parameters::DataTypes::typeString) {
+            return runSingleTemplateMode<std::string>();
+        }
+
+        if (Parameters::dataType == Parameters::DataTypes::typeChar) {
+            return runSingleTemplateMode<char>();
+        }
+
+        if (Parameters::dataType == Parameters::DataTypes::typeFloat) {
+            return runSingleTemplateMode<float>();
+        }
+    }
+
+    std::cout << "Nieobslugiwany typ lub struktura.\n";
     return false;
 }
 

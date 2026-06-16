@@ -1,0 +1,6 @@
+date,time,algorithm,structure,variant,size,repetitions,data_type,distribution,pivot,shell_gap,average_us,min_us,max_us
+2026-04-18,16:51:31,quick,template_array_int,middle,25000,30,int,undefined,undefined,undefined,3165.13,2668,3387
+2026-04-18,16:51:31,quick,template_array_double,middle,25000,30,int,undefined,undefined,undefined,3342.67,3185,3518
+2026-04-18,16:51:31,quick,template_array_unsigned_int,middle,25000,30,int,undefined,undefined,undefined,3305.07,3141,3586
+2026-04-18,16:51:32,quick,template_array_string,middle,25000,30,int,undefined,undefined,undefined,29568,26788,33945
+2026-06-02,09:47:33,quick,array,middle,10000,20,string,undefined,middle,undefined,2144.2,1835,2736

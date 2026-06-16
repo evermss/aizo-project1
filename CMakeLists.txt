@@ -8,7 +8,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(aizo-project1
         src/main.cpp
-        src/FileLoader.cpp
         src/structures/DynamicArray.cpp
         src/structures/SinglyLinkedList.cpp
         src/structures/DoublyLinkedList.cpp
@@ -21,6 +20,7 @@ add_executable(aizo-project1
         src/structures/Stack.cpp
         src/research/ResearchRunner.cpp
         src/research/TypeResearch.cpp
+        src/FileLoader.cpp
 )
 
 target_include_directories(aizo-project1 PRIVATE

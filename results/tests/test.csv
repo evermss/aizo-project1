@@ -1,0 +1,3 @@
+date,time,algorithm,structure,variant,size,repetitions,data_type,distribution,pivot,shell_gap,average_us,min_us,max_us
+2026-06-15,18:33:10,quick,double_list,middle,1000,5,int,undefined,middle,undefined,16707.2,15442,18559
+2026-06-15,18:37:20,quick,double_list,middle,1000,5,int,undefined,middle,undefined,13973,12564,16855

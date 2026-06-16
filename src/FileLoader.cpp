@@ -3,7 +3,7 @@
 #include <iostream>
 
 // Wczytuje dane z pliku do struktury liniowej.
-// Pierwsza linia zawiera liczbe elementow, kolejne linie wartosci.
+// Pierwsza linia zawiera liczbę elementów, kolejne linie wartości.
 bool FileLoader::loadFromFile(const std::string& fileName, LinearStructure& structure) {
     std::ifstream file(fileName);
 
@@ -22,7 +22,7 @@ bool FileLoader::loadFromFile(const std::string& fileName, LinearStructure& stru
 
     structure.clear();
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         int value;
         file >> value;
 
@@ -37,19 +37,17 @@ bool FileLoader::loadFromFile(const std::string& fileName, LinearStructure& stru
     return true;
 }
 
-// Zapisuje strukture do pliku w tym samym formacie:
-// najpierw liczba elementow, potem kolejne wartosci.
 bool FileLoader::saveToFile(const std::string& fileName, const LinearStructure& structure) {
     std::ofstream file(fileName);
 
     if (!file.is_open()) {
-        std::cout << "Blad zapisu do pliku: " << fileName << "\n";
+        std::cout << "Blad zapisu pliku: " << fileName << "\n";
         return false;
     }
 
     file << structure.getSize() << "\n";
 
-    for (int i = 0; i < structure.getSize(); i++) {
+    for (int i = 0; i < structure.getSize(); ++i) {
         file << structure.get(i) << "\n";
     }
 

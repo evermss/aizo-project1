@@ -3,6 +3,17 @@
 
 template <typename T>
 class TemplateArray {
+public:
+    using ValueType = T;
+
+    T& get(int index) {
+        return data[index];
+    }
+
+    const T& get(int index) const {
+        return data[index];
+    }
+
 private:
     T* data;
     int size;
@@ -21,6 +32,7 @@ private:
     }
 
 public:
+
     TemplateArray() {
         data = nullptr;
         size = 0;
